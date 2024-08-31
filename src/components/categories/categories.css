@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+.categories_main__wrapper {
+    display: flex;
+    height: 60px;
+    border-top: 0.8px solid #e5e5e5;
+    border-bottom: 0.8px solid #e5e5e5;
+}
+
+.browse_categories {
+    width: 220px;
+    height: 60px;
+    border-right: 1px solid rgb(0, 0, 0, 0.1);
+    margin-left: 75px;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    align-items: center;
+}
+
+.menu_icon {
+    font-size: 23px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.browse_categories p {
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.more_categories {
+    width: 700px;
+    margin-left: 60px;
+    height: 60px;
+    align-items: center;
+    display: flex;
+}
+
+.more_categories ul {
+    width: 100%;
+    position: relative;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.15px;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.more_categories ul li {
+    position: relative;
+    cursor: pointer;
+}
+
+.more_categories ul li span {
+    position: relative;
+    z-index: 1;
+}
+
+.sale {
+    font-size: 10px;
+    padding: 3px;
+    border-radius: 5px;
+    font-family: 'Inter', sans-serif;
+    margin-left: 3px;
+    color: #fff;
+    background-color: #199588;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+#hot {
+    background-color: #E62A65;
+}
+
+.arrow {
+    position: absolute;
+    top: 2px;
+}
+
+.top_offers{
+    display: flex;
+    width: 117px;
+    height: 60px;
+    position: absolute;
+    right: 30px;
+    justify-content: space-between;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.15px;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 60px;
+}
+
+.toolsIcon{
+    font-size: 30px;
+    margin-right: 10px;
+    cursor: pointer;
+    margin-top: 15px;
+}

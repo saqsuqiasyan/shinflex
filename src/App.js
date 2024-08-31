@@ -1,25 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Header from './components/header/header';
+import HomePage from './components/pages/HomePage';
+import AbrasivesPage from './components/pages/AbrasivesPage';
+import CutterToolsPage from './components/pages/CutterToolsPage';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Header /> 
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/abrasives" element={<AbrasivesPage />} />
+        <Route path="/cutter-tools" element={<CutterToolsPage />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
