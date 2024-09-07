@@ -1,0 +1,134 @@
+.special_main {
+    position: absolute;
+    z-index: 3;
+    top: 60px;
+    left: -625%;
+    width: 98vw;
+    height: 450px;
+    box-shadow: 0px -5px 13px 4px rgba(34, 60, 80, 0.2);
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(247, 247, 247);
+}
+
+.special_category_main {
+    width: 95%;
+    height: 90%;
+    overflow-x: hidden;
+    position: relative;
+}
+
+.special_category_card {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    border-left: 0.8px solid rgb(191, 191, 191);
+    transition: transform 0.5s ease-in-out;
+}
+
+.special_category_card_item {
+    min-width: calc(100% / 7);
+    height: 100%;
+    background-color: #fff;
+    border: 0.8px solid rgb(191, 191, 191);
+    border-left: none;
+    list-style: none;
+}
+
+.special_category_card_item .card_item_img_container {
+    width: 100%;
+    height: 50%;
+    background-color: #f0f0f0;
+}
+
+
+.special_category_card_item .card_item_img_container img {
+    width: 100%;
+    height: 100%;
+}
+
+.special_category_card_item .card_item_name {
+    line-height: normal;
+    font-weight: 500;
+    font-size: 16px;
+    margin: 0 12px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.special_category_card_item .card_item_name:hover {
+    color: #DF3030;
+    text-decoration: underline;
+}
+
+.special_category_card_item .rating {
+    margin: 0 12px;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    color: rgb(191, 191, 191);
+    height: 30px;
+}
+
+.special_category_card_item .rating .rating_number {
+    color: #000;
+    font-weight: normal;
+    margin-top: 7px;
+}
+
+.special_category_card_item .price {
+    font-weight: 600;
+    font-size: 20px;
+    margin: 12px;
+    line-height: 1;
+}
+
+.special_category_card_item .price::before {
+    content: '$';
+}
+
+.special_category_card_item .add_to_cart_btn {
+    width: calc(100% - 24px);
+    margin: 0 12px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .3s ease;
+}
+
+.special_category_card_item:hover .add_to_cart_btn {
+    background-color: #df3030;
+    color: #fff;
+}
+
+button {
+    width: 30px;
+    height: 30px;
+    background-color: #df3030;
+    border-radius: 50%;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.prev_btn, .next_btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.prev_btn {
+    left: 10px;
+}
+
+.next_btn {
+    right: 10px;
+}

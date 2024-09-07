@@ -24,7 +24,7 @@ const BrowseCategories = () => {
                     }} onClick={() => setHideTools(true)}>Cutter Tools</Link>
                 </div>
                 {cutterCategories && (
-                    <>
+                    <div data-aos="fade-down" data-aos-easing="linear" data-aos-duration={700}>
                         <Link to='/cutter-tools/cable-cutters' className='tool_links' onClick={() => setHideTools(true)}>
                             <li className='browse_tool_under_item'>Cable Cutters</li>
                         </Link>
@@ -37,7 +37,7 @@ const BrowseCategories = () => {
                         <Link to='/cutter-tools/multi-tools' className='tool_links' onClick={() => setHideTools(true)}>
                             <li className='browse_tool_under_item'>Multi Tools</li>
                         </Link>
-                    </>
+                    </div>
                 )}
 
                 <p className='more_tool_items' style={{
@@ -70,7 +70,7 @@ const BrowseCategories = () => {
                     }} onClick={() => setHideTools(true)}>Power Tools</Link>
                 </div>
                 {powerCategories && (
-                    <>
+                    <div data-aos="fade-down" data-aos-easing="linear" data-aos-duration={700}>
                         <Link to='/power-tools/plier-sockets' className='tool_links' onClick={() => setHideTools(true)}>
                             <li className='browse_tool_under_item'>Plier Sockets</li>
                         </Link>
@@ -83,7 +83,7 @@ const BrowseCategories = () => {
                         <Link to='/power-tools/snips' className='tool_links' onClick={() => setHideTools(true)}>
                             <li className='browse_tool_under_item'>Snips</li>
                         </Link>
-                    </>
+                    </div>
                 )}
 
                 <p className='more_tool_items' style={{

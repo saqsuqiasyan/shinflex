@@ -37,7 +37,9 @@
     display: flex;
 }
 
-.more_categories ul {
+.categories__container {
+    height: 60px;
+    align-items: center;
     width: 100%;
     position: relative;
     list-style: none;
@@ -50,13 +52,11 @@
     font-weight: 500;
 }
 
-.more_categories ul li {
-    position: relative;
+.categories__container li {
     cursor: pointer;
 }
 
-.more_categories ul li span {
-    position: relative;
+.categories__container li span {
     z-index: 1;
 }
 
@@ -81,7 +81,7 @@
     top: 2px;
 }
 
-.top_offers{
+.top_offers {
     display: flex;
     width: 117px;
     height: 60px;
@@ -95,7 +95,7 @@
     line-height: 60px;
 }
 
-.toolsIcon{
+.toolsIcon {
     font-size: 30px;
     margin-right: 10px;
     cursor: pointer;
