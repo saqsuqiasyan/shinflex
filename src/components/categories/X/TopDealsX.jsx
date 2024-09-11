@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom';
 import { IoIosArrowDown } from "react-icons/io";
-import Special from '../categoriesHovers/special/special';
+import { Link } from 'react-router-dom';
 import AOS from 'aos';
+import Categories from '../categoriesHovers/categories/Categories';
+import TopDeals from '../categoriesHovers/topDeals/topDeals';
 
-const SpecialX = () => {
+const TopDealsX = () => {
     const [hover, setHover] = useState(false);
     const hoverTimeout = useRef(null);
 
@@ -34,19 +35,18 @@ const SpecialX = () => {
             <div
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
-                style={{ position: 'relative', height: '100%', lineHeight: '60px' }}
+                style={{ height: '100%', lineHeight: '60px' }}
             >
-                <Link to='/collections/sale-collection' style={{ color: '#000', textDecoration: 'none' }} onClick={() => setHover(false)}>
-                    Special
+                <Link to='/collections/drillers#' style={{ color: '#000', textDecoration: 'none' }} onClick={() => setHover(false)}>
+                    Top Deals
                 </Link>
-                <span className='sale'>sale</span> <IoIosArrowDown className='arrow' style={{ marginTop: '20px' }} />
-
+                <IoIosArrowDown className='arrow' style={{ marginTop: '20px' }} />
                 {hover && (
-                    <Special />
+                    <TopDeals />
                 )}
             </div>
         </>
     )
 }
 
-export default SpecialX
+export default TopDealsX

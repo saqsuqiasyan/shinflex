@@ -8,6 +8,7 @@ import BrowseCategoriesX from './X/BrowseCategoriesX.jsx'
 import OurStoreX from './X/OurStoreX.jsx';
 import SpecialX from './X/SpecialX.jsx';
 import CategoriesX from './X/CategoriesX.jsx';
+import TopDealsX from './X/TopDealsX.jsx';
 
 const Categories = () => {
 
@@ -27,7 +28,8 @@ const Categories = () => {
 
           <CategoriesX />
 
-          <li style={{ position: 'relative' }}>Top Deals <IoIosArrowDown className='arrow' /></li>
+          <TopDealsX />
+
           <li style={{ position: 'relative' }}>Elements <IoIosArrowDown className='arrow' /></li>
         </div>
       </div>

@@ -18,7 +18,7 @@ const Categories = () => {
 
     const sidesMapping = (store) => {
         return store.map((el, id) => (
-            <p key={id}><Link style={id === 0 ? { color: '#000', textDecoration: 'none', fontSize: '18px' } : { color: '#000', textDecoration: 'none', fontWeight: 'normal' }} to={`/categories/${el.toLowerCase().replace(' ', '-')}`}>{el}</Link></p>
+            <p key={id}><Link style={id === 0 ? { color: 'inherit', textDecoration: 'none', fontSize: '18px' } : { color: 'inherit', textDecoration: 'none', fontWeight: 'normal' }} to={`/categories/${el.toLowerCase().replace(' ', '-')}`}>{el}</Link></p>
         ))
     }
 
@@ -42,12 +42,12 @@ const Categories = () => {
                                 <img src={Example} alt="Tool" />
                             </div>
                             <div className="stats">
-                                <p className="name">
+                                <p className="name" onClick={() => setHideTools(true)}>
                                     Lorem ipsum dolor sit amet consectetur adipisicing.
                                 </p>
                                 <div className="rating">
                                     {new Array(5).fill(null).map((_, index) =>
-                                        <IoStar key={index} className='rating_icon' style={{ marginRight: '3px' }} />)
+                                        <IoStar key={index} className='rating_icon' style={{ marginRight: '3px', cursor: 'pointer' }} />)
                                     }
                                     <span className='rating_number'>(0)</span>
                                 </div>

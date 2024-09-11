@@ -4,7 +4,7 @@ import Driller from '../../../../assets/photos/driller.png'
 import './ourStore.css'
 
 const OurStore = () => {
-    const [hideTools, setHideTools] = useState(false)
+    const [hideTools, setHideTools] = useState(false);
 
     const airTools = ['Air Tools', 'Pipe Cutters', 'Air Compressors', 'Grinding Air Tools', 'Pneumatic Impact', 'Angle Grinders']
 
@@ -12,7 +12,7 @@ const OurStore = () => {
 
     const sidesMapping = (store) => {
         return store.map((el, id) => (
-            <p key={id}><Link style={id === 0 ? { color: '#000', textDecoration: 'none', fontSize: '18px' } : { color: '#000', textDecoration: 'none', fontWeight: 'normal' }} to={`/collections/${el === 'Pliers & Cutters' ? 'pliers-cutters' : el.toLowerCase().replace(' ', '-')}`}>{el}</Link></p>
+            <p key={id}><Link style={id === 0 ? { color: 'inherit', textDecoration: 'none', fontSize: '18px' } : { color: 'inherit', textDecoration: 'none', fontWeight: 'normal' }} to={`/collections/${el === 'Pliers & Cutters' ? 'pliers-cutters' : el.toLowerCase().replace(' ', '-')}`}>{el}</Link></p>
         ))
     }
 

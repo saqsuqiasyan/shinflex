@@ -32,6 +32,11 @@
     line-height: 1.5;
     padding-left: 30px;
     padding-top: 10px;
+    transition: .2s ease-in-out;
+}
+
+.categories_nav_main .left_hand .child p:hover {
+    color: #df3030;
 }
 
 .categories_nav_main .right_hand {
@@ -93,6 +98,11 @@
     -webkit-line-clamp: 2;
     overflow: hidden;
     text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+.categories_nav_main .right_hand .items .item .stats p:hover {
+    color: #DF3030;
 }
 
 .stats .rating {

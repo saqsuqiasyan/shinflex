@@ -29,7 +29,12 @@
 }
 
 .left_side_child p {
+    transition: .2s ease-in-out;
     height: 15%;
+}
+
+.left_side_child p:hover {
+    color: #df3030;
 }
 
 .left_side_items {
