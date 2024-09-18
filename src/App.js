@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/header/header';
-import HomePage from './components/pages/HomePage';
+import HomePage from './components/pages/HomePage/HomePage';
 import AbrasivesPage from './components/pages/AbrasivesPage';
 import CutterToolsPage from './components/pages/CutterToolsPage';
 

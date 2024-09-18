@@ -1,0 +1,11 @@
+@media (max-width: 768px) {
+    .slider-container .item {
+        flex-basis: calc(100% / 2);
+    }
+}
+
+@media (max-width: 480px) {
+    .slider-container .item {
+        flex-basis: 100%;
+    }
+}

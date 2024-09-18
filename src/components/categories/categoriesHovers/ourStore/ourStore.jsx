@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import Driller from '../../../../assets/photos/driller.png'
+import Example from '../../../../assets/photos/driller.png'
 import './ourStore.css'
 
 const OurStore = () => {
@@ -33,7 +33,7 @@ const OurStore = () => {
                         <p style={{ fontSize: '23px', lineHeight: '1.2' }}>Flat 80% OFF</p>
                     </div>
                     <div className="sale_driller_photo">
-                        <img src={Driller} alt="driller" />
+                        <img src={Example} alt="driller" />
                     </div>
                 </div>
                 <div className='sale_driller_right'>
@@ -42,7 +42,7 @@ const OurStore = () => {
                         <p style={{ fontSize: '23px', lineHeight: '1.2' }}>Up to 30% OFF</p>
                     </div>
                     <div className="sale_driller_photo" style={{ width: '30%', height: '90%' }}>
-                        <img src={Driller} alt="driller" style={{ width: '100%', height: '90%' }} />
+                        <img src={Example} alt="driller" style={{ width: '100%', height: '90%' }} />
                     </div>
                 </div>
             </div>

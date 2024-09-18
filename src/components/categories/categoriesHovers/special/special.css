@@ -108,7 +108,7 @@
     color: #fff;
 }
 
-button {
+.prev_btn, .next_btn {
     width: 30px;
     height: 30px;
     background-color: #df3030;
@@ -116,9 +116,6 @@ button {
     border: none;
     color: white;
     cursor: pointer;
-}
-
-.prev_btn, .next_btn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
