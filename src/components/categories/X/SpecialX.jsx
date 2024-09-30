@@ -4,7 +4,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import Special from '../categoriesHovers/special/special';
 import AOS from 'aos';
 
-const SpecialX = () => {
+const SpecialX = ({ label }) => {
     const [hover, setHover] = useState(false);
     const hoverTimeout = useRef(null);
 
@@ -34,10 +34,10 @@ const SpecialX = () => {
             <div
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
-                style={{ position: 'relative', height: '100%', lineHeight: '60px' }}
+                style={{ height: '100%', lineHeight: '60px' }}
             >
                 <Link to='/collections/sale-collection' style={{ color: '#000', textDecoration: 'none' }} onClick={() => setHover(false)}>
-                    Special
+                    {label}
                 </Link>
                 <span className='sale'>sale</span> <IoIosArrowDown className='arrow' style={{ marginTop: '20px' }} />
 

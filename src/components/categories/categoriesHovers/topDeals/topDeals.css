@@ -1,8 +1,7 @@
 .top_deals_container {
     position: absolute;
     z-index: 3;
-    top: 60px;
-    left: -49%;
+    left: 1%;
     width: 98vw;
     height: 550px;
     background-color: #f7f7f7;

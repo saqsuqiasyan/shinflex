@@ -4,8 +4,7 @@
     width: 265px;
     height: auto;
     z-index: 3;
-    top: 192px;
-    left: 30px;
+    top: 60px;
     border: 1px solid rgb(0, 0, 0, 0.1);
     border-top: none;
     font-family: 'Inter', sans-serif;
@@ -38,7 +37,6 @@
     cursor: pointer;
     border-bottom: 1px solid rgb(0, 0, 0, 0.1);
 }
-
 
 .browse_tool_under_item:hover {
     color: #DF3030;

@@ -1,0 +1,111 @@
+.HomePage_static__main {
+    width: 95%;
+    margin-left: 2.5%;
+    height: 260px;
+    margin-top: 30px;
+    display: flex;
+    flex-basis: calc(100% / 3);
+    justify-content: space-between;
+    font-family: 'Inter', sans-serif;
+}
+
+.HomePage_static__main .item {
+    width: 32%;
+    height: 100%;
+    padding: 20px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.HomePage_static__main .item .left_hand {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+.HomePage_static__main .item .left_hand span {
+    padding: 5px 12px;
+    margin-bottom: 15px;
+    font-size: 12px;
+    border-radius: 4px;
+    color: lime;
+}
+
+.HomePage_static__main .item .left_hand p:nth-last-child(1) {
+    font-size: 26px;
+    letter-spacing: 1.2px;
+    font-weight: 400;
+    margin-top: 10px;
+}
+
+.HomePage_static__main .item .left_hand p:nth-last-child(1)::before {
+    content: '$';
+}
+
+.HomePage_static__main .item .left_hand p:nth-last-child(2) {
+    font-size: 12px;
+    margin-top: 20px;
+}
+
+.HomePage_static__main .item .left_hand p:nth-last-child(3) {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.HomePage_static__main .item .right_hand {
+    width: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.HomePage_static__main .item .right_hand img {
+    width: 100%;
+    height: 100%;
+}
+
+@media (max-width: 1060px) {
+    .HomePage_static__main .item:nth-last-child(1){
+        display: none;
+    }
+
+    .HomePage_static__main .item {
+        width: 48%;
+    }
+}
+
+@media (max-width: 840px) {
+    .HomePage_static__main .item:nth-last-child(2){
+        display: none;
+    }
+
+    .HomePage_static__main .item {
+        width: 100%;
+    }
+
+    .HomePage_static__main .item .right_hand {
+        width: 30%;
+    }
+}
+
+@media (max-width: 480px) {
+    .HomePage_static__main .item .left_hand {
+        width: 100%;
+    }
+
+    .HomePage_static__main .item .right_hand {
+        display: none;
+    }
+
+}

@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import HeaderTop from './headerTop'
 import HeaderMain from './headerMain'
 import Categories from '../categories/categories'
 
-const header = () => {
+const Header = () => {
     return (
         <div>
             <HeaderTop />
@@ -13,4 +13,4 @@ const header = () => {
     )
 }
 
-export default header
+export default Header

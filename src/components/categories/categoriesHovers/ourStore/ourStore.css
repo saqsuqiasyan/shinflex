@@ -1,8 +1,7 @@
 .ourStoreMain {
     position: absolute;
     z-index: 3;
-    top: 60px;
-    left: -49%;
+    left: 1%;
     width: 98vw;
     height: 300px;
     background-color: #fff;

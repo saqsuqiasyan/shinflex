@@ -38,7 +38,7 @@ const OurStoreX = () => {
                 style={{ height: '100%', lineHeight: '60px' }}
             >
                 <Link to='/our-store' style={{ color: '#000', textDecoration: 'none' }} onClick={() => setHover(false)}>
-                    Our Store <IoIosArrowDown style={{ marginTop: '20px' }} className='arrow' />
+                    Our Store <IoIosArrowDown className='arrow' />
                 </Link>
                 {hover && (
                     <OurStore />

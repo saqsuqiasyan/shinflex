@@ -1,6 +1,6 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules"; // Correct Swiper import
+import { Navigation } from "swiper/modules";
 import "swiper/swiper-bundle.css";
 import Example from '../../../../assets/photos/11_03.webp'
 import "./TopSuggestions.css";
@@ -16,9 +16,9 @@ const product = {
 const TopSuggestions = () => {
     return (
         <div className="slider-container">
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <h2>ԹՈՓ ԱՌԱՋԱՐԿՆԵՐ</h2>
-                <div className="slider-buttons">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h2 style={{ marginBottom: '12px'}}>ԹՈՓ ԱՌԱՋԱՐԿՆԵՐ</h2>
+                <div className="slider-buttons" style={{ marginBottom: '14px'}}>
                     <button className="prev-btn">&lt;</button>
                     <button className="next-btn">&gt;</button>
                 </div>
