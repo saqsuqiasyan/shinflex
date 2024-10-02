@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import Example from '../../../../assets/photos/driller.png'
 import './Elements.css'
 
 const Element = () => {
@@ -21,7 +20,7 @@ const Element = () => {
     },
     {
       title: 'FAQ',
-      url: '/pages/faqs'
+      url: '/pages/faq'
     },
     {
       title: 'Compare',

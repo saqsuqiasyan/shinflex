@@ -48,9 +48,9 @@ const HeaderTop = () => {
     return <div>No data available</div>;
   }
 
-  const handleGetData = (lang, [en, ru, hy]) => {
-    return lang === 'en' ? en : lang === 'ru' ? ru : hy
-  }
+  // const handleGetData = (lang, [en, ru, hy]) => {
+  //   return lang === 'en' ? en : lang === 'ru' ? ru : hy
+  // }
 
   return (
     <div className='redContainer'>

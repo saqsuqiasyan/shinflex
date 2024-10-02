@@ -6,7 +6,7 @@ const Filter = ({ applyFilters }) => {
     const [availability, setAvailability] = useState({});
     const [moreFilters, setMoreFilters] = useState({});
     const [brand, setBrand] = useState({});
-    const [color, setColor] = useState({});
+    const [color] = useState({});
     const [productType, setProductType] = useState({});
 
     const [isAvailabilityOpen, setAvailabilityOpen] = useState(true);

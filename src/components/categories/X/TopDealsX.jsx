@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import { IoIosArrowDown } from "react-icons/io";
 import { Link } from 'react-router-dom';
 import AOS from 'aos';
-import Categories from '../categoriesHovers/categories/Categories';
 import TopDeals from '../categoriesHovers/topDeals/topDeals';
 
 const TopDealsX = () => {

@@ -6,6 +6,7 @@ import Filter from './Filter/Filter'
 import Products from './Products/Products'
 import Static from './Static/Static'
 import Comments from './Comments/Comments'
+import Map from '../../Map'
 
 const HomePage = () => {
   return (
@@ -19,6 +20,7 @@ const HomePage = () => {
       </div>
       <Static />
       <Comments />
+      <Map />
     </div>
   )
 }
