@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import Loading from '../loading/Loading'
-import Logo from '../../assets/photos/logo.png'
 import { FiSearch } from "react-icons/fi";
 import { FiPhoneCall } from "react-icons/fi";
 import { FaRegUser } from "react-icons/fa";
@@ -47,7 +46,7 @@ const HeaderMain = () => {
         <IoMenuSharp className="header_menu_icon" />
         <div id='logo'>
           <Link to='/'>
-            <img src={Logo} alt="ShinFlex" />
+            <img src={data[0].logo} alt="ShinFlex" />
           </Link>
         </div>
       </div>
@@ -70,7 +69,7 @@ const HeaderMain = () => {
             <FaRegUser className='statsIcon' />
             <div >
               <p>{handleGetData(lang, [data[0].login_en, data[0].login_ru, data[0].login_hy])}</p>
-              <span><b>Log in</b></span>
+              <span><b><Link to="/account/login" style={{ color: 'inherit', textDecoration: 'none' }}>Log in</Link></b></span>
             </div>
           </div>
         </li>

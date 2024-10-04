@@ -40,7 +40,6 @@ const Categories = () => {
   if (!data || !data[0]) {
     return <div>No data available</div>;
   }
-  console.log(data);
 
   const handleGetData = (lang, [en, ru, hy]) => {
     return lang === 'en' ? en : lang === 'ru' ? ru : hy
