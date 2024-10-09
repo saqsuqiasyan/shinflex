@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { IoIosArrowDown } from "react-icons/io";
 import Special from '../categoriesHovers/special/special';
 import AOS from 'aos';
+import PropTypes from 'prop-types';
 
-const SpecialX = ({ label }) => {
+const SpecialX = (props) => {
     const [hover, setHover] = useState(false);
     const hoverTimeout = useRef(null);
 
@@ -37,7 +38,7 @@ const SpecialX = ({ label }) => {
                 style={{ height: '100%', lineHeight: '60px' }}
             >
                 <Link to='/collections/sale-collection' style={{ color: '#000', textDecoration: 'none' }} onClick={() => setHover(false)}>
-                    {label}
+                    {props.label}
                 </Link>
                 <span className='sale'>sale</span> <IoIosArrowDown className='arrow' style={{ marginTop: '20px' }} />
 
@@ -46,7 +47,11 @@ const SpecialX = ({ label }) => {
                 )}
             </div>
         </>
-    )
+    );
 }
 
-export default SpecialX
+SpecialX.propTypes = {
+    label: PropTypes.string.isRequired
+};
+
+export default SpecialX;

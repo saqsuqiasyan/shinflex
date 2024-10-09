@@ -1,0 +1,121 @@
+.menuSM_full {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.37);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    display: flex;
+}
+
+.menuSM_full .close {
+    width: calc(100% - 300px);
+    height: auto;
+}
+
+
+.menuSM_main {
+    width: 300px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+.menuSM_main .menu-header {
+    background-color: #DF3030;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+}
+
+.menuSM_main .menu-header h3 {
+    margin: 0;
+    font-weight: 500;
+}
+
+.menuSM_main .close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #fff;
+}
+
+.menuSM_main ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menuSM_main li {
+    padding: 16px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menuSM_main li:last-child {
+    border-bottom: none;
+}
+
+.menuSM_main a {
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+}
+
+.menuSM_main .button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.menuSM_main .label {
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 8px;
+}
+
+.menuSM_main .more_items {
+    border: none;
+    background-color: transparent;
+    font-size: 17px;
+}
+
+.menuSM_main .sale {
+    background-color: #199588;
+    color: white;
+}
+
+.menuSM_main .hot {
+    background-color: #E62A65;
+    color: white;
+}
+
+.menuSM_main .menu-footer {
+    padding: 16px;
+    text-align: center;
+}
+
+.menuSM_main .menu-footer p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.menuSM_main .social-icons {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+.menuSM_main .social-icons i {
+    font-size: 18px;
+    color: black;
+}

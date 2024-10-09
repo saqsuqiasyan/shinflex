@@ -1,78 +1,82 @@
-.login-container {
+/* Center the container */
+.auth-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: calc(100vh - 192px);
-    font-family: Arial, sans-serif;
+    background-color: #fff;
+    font-family: 'Inter', sans-serif;
 }
 
-.login-container h2 {
-    margin-bottom: 30px;
-    font-size: 26px;
-    font-weight: bold;
-}
-
-.login-container .login-form {
-    width: 500px;
+/* Style the form container */
+.auth-form {
     display: flex;
     flex-direction: column;
+    width: 300px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.login-container .login-form input {
-    margin-bottom: 15px;
+/* Input styles */
+.auth-input {
     padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-.login-container .forgot-password {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
     font-size: 14px;
-    text-align: right;
-    color: #777;
-    text-decoration: none;
+    width: 100%;
 }
 
-.login-container .login-button {
-    background-color: #f11e1e;
-    color: #fff;
+/* Error message */
+.error-message {
+    color: red;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* Button styles */
+.auth-button {
+    background-color: #DF3030;
+    color: white;
     padding: 12px;
-    font-size: 16px;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
+    font-size: 16px;
     transition: .3s ease-in-out;
 }
 
-.login-container .login-button:hover {
+.auth-button:hover {
     background-color: #f5f5f5;
     color: #000;
 }
 
-.login-container .error-message {
-    color: red;
-    margin-bottom: 15px;
+/* Forgot password link */
+.forgot-password {
+    text-align: right;
+    margin-bottom: 10px;
     font-size: 14px;
+    color: #666;
+    text-decoration: none;
 }
 
-.login-container .signup {
+.forgot-password:hover {
+    color: #333;
+}
+
+/* Signup toggle link */
+.signup {
+    text-align: center;
     margin-top: 15px;
     font-size: 14px;
 }
 
-.login-container .signup a {
-    color: #007bff;
+.toggle-link {
+    color: #df3030;
+    cursor: pointer;
     text-decoration: none;
-}
-
-.login-container .signup a:hover {
-    text-decoration: underline;
-}
-
-@media screen and (max-width: 768px) {
-    .login-container .login-form {
-        width: 300px;
-    }
 }

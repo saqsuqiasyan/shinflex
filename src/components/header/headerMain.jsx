@@ -6,11 +6,14 @@ import { FaRegUser } from "react-icons/fa";
 import { FaCartShopping } from "react-icons/fa6";
 import { IoMenuSharp } from "react-icons/io5";
 import { Link } from 'react-router-dom';
+import MenuSM from './MenuSM/MenuSM';
 
 const HeaderMain = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [lang] = useState(localStorage.getItem('lang') || 'hy');
+  const [sm, setSM] = useState(false);
+  const name = localStorage.getItem('name');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,7 +46,8 @@ const HeaderMain = () => {
   return (
     <div className='headerMain'>
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <IoMenuSharp className="header_menu_icon" />
+        <IoMenuSharp className="header_menu_icon" onClick={() => setSM(true)} />
+        {sm && <MenuSM sm={() => setSM()} />}
         <div id='logo'>
           <Link to='/'>
             <img src={data[0].logo} alt="ShinFlex" />
@@ -69,7 +73,7 @@ const HeaderMain = () => {
             <FaRegUser className='statsIcon' />
             <div >
               <p>{handleGetData(lang, [data[0].login_en, data[0].login_ru, data[0].login_hy])}</p>
-              <span><b><Link to="/account/login" style={{ color: 'inherit', textDecoration: 'none' }}>Log in</Link></b></span>
+              <span><b>{name ? name : <Link to="/account/login" style={{ color: 'inherit', textDecoration: 'none' }}>Log in</Link>}</b></span>
             </div>
           </div>
         </li>

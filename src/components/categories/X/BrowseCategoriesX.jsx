@@ -3,7 +3,7 @@ import { IoMenu } from "react-icons/io5";
 import BrowseCategories from '../categoriesHovers/browseCategories/browseCategories'
 import AOS from 'aos';
 
-const BrowseCategoriesX = ({ label }) => {
+const BrowseCategoriesX = () => {
     const [hover, setHover] = useState(false);
     const hoverTimeout = useRef(null);
 
@@ -35,7 +35,7 @@ const BrowseCategoriesX = ({ label }) => {
             onMouseLeave={handleMouseLeave}
         >
             <IoMenu className='menu_icon' />
-            <p>{label}</p>
+            <p>Browse</p>
             {hover && (
                 <div
                     className='browseCategories_main'

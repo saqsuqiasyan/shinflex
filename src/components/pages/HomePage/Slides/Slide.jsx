@@ -5,7 +5,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 
 const Slide = () => {
-    const [data, setData] = useState([]);
+    const [data, setData] = useState();
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
     const [lang] = useState(localStorage.getItem('lang') || 'hy');
@@ -18,7 +18,7 @@ const Slide = () => {
                     throw new Error('Network response was not ok');
                 }
                 const result = await response.json();
-                setData(result);
+                setData(result);                
             } catch (error) {
                 setError(error);
             } finally {

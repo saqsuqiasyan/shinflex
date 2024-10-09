@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { inStockArr, moreFiltersArr, brandArr, colorArr, productTypeArr } from './FilterStore';
 import './Filter.css';
 
-const Filter = ({ applyFilters }) => {
+const Filter = () => {
     const [availability, setAvailability] = useState({});
     const [moreFilters, setMoreFilters] = useState({});
     const [brand, setBrand] = useState({});
-    const [color] = useState({});
     const [productType, setProductType] = useState({});
 
     const [isAvailabilityOpen, setAvailabilityOpen] = useState(true);
@@ -136,7 +135,7 @@ const Filter = ({ applyFilters }) => {
                 )}
             </div>
 
-            <button onClick={() => applyFilters({ availability, moreFilters, brand, color, productType })}>
+            <button>
                 Apply Filters
             </button>
         </div>

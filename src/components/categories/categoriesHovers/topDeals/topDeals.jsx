@@ -26,7 +26,7 @@ const TopDeals = () => {
                 <p>Cutters</p>
                 <div className="items">
                     {new Array(6).fill(null).map((_, id) => (
-                        <div className="item" onClick={() => setHideTools(true)}>
+                        <div className="item" onClick={() => setHideTools(true)} key={id}>
                             <img src={Example} alt="tool" />
                             <div className="toolInfo">
                                 <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Maiores, delectus.</p>
