@@ -1,5 +1,11 @@
 {
   "name": "shinflex",
+  "description": "Shinflex",
+  "homepage": "https://shinflex.am/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shinflex/shinflex.am.git"
+  },
   "version": "0.1.0",
   "private": true,
   "dependencies": {

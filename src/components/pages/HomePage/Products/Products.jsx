@@ -11,9 +11,9 @@ const product = {
 
 const Products = () => {
     const [currentPage, setCurrentPage] = useState(1);
-    const productsPerPage = 12;
+    const productsPerPage = 15;
 
-    const allProducts = new Array(70).fill(product); // Example: Total of 40 products.
+    const allProducts = new Array(70).fill(product);
 
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;

@@ -15,7 +15,6 @@ const AuthForm = () => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const handleSubmit = async (e) => {
-    localStorage.setItem('name', firstName);
     e.preventDefault();
 
     if (!emailRegex.test(email)) {
@@ -60,8 +59,13 @@ const AuthForm = () => {
 
       if (response.ok && contentType.includes('application/json')) {
         const result = await response.json();
-        console.log(`${isLogin ? 'Login' : 'Registration'} successful:`, result);
+
+        const userFirstName = result.data ? result.data.first_name : null;
+
+        localStorage.setItem('name', userFirstName ? userFirstName : 'Guest');
+        
         navigate('/');
+        window.location.reload();
       } else {
         const errorMessage = contentType.includes('application/json')
           ? (await response.json()).detail || `Failed to ${isLogin ? 'login' : 'register'}.`
@@ -74,9 +78,10 @@ const AuthForm = () => {
     }
   };
 
+
   return (
     <div className="auth-container">
-      <h2 style={{marginBottom: '20px'}}>{isLogin ? 'Login' : 'Register'}</h2>
+      <h2 style={{ marginBottom: '20px' }}>{isLogin ? 'Login' : 'Register'}</h2>
       {error && <div className="error-message">{error}</div>}
       <form onSubmit={handleSubmit} className="auth-form">
         {!isLogin && (
