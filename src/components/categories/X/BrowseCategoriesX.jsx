@@ -6,6 +6,26 @@ import AOS from 'aos';
 const BrowseCategoriesX = () => {
     const [hover, setHover] = useState(false);
     const hoverTimeout = useRef(null);
+    const [lang] = useState(localStorage.getItem('lang') || 'hy');
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch("https://shinflex.am/SFApi/Header/");
+                const result = await response.json();
+                setData(result[0]);
+                
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchData();
+    }, []);
+
+    const handleGetData = (lang, [en, ru, hy]) => {
+        return lang === 'en' ? en : lang === 'ru' ? ru : hy;
+    };
 
     const handleMouseEnter = () => {
         if (hoverTimeout.current) {
@@ -23,7 +43,7 @@ const BrowseCategoriesX = () => {
 
     useEffect(() => {
         AOS.init({
-            duration: 300,
+            duration: 200,
             once: true,
         });
     }, []);
@@ -35,11 +55,12 @@ const BrowseCategoriesX = () => {
             onMouseLeave={handleMouseLeave}
         >
             <IoMenu className='menu_icon' />
-            <p>Browse</p>
+            <p>{handleGetData(lang, [data.browse_name_en, data.browse_name_ru, data.browse_name_hy])}
+            </p>
             {hover && (
                 <div
                     className='browseCategories_main'
-                    data-aos="fade-in"
+                    data-aos="fade-up"
                 >
                     <BrowseCategories />
                 </div>

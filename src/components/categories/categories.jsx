@@ -14,6 +14,7 @@ import Loading from '../loading/Loading.jsx'
 
 const Categories = () => {
   const [data, setData] = useState(null);
+  const [data2, setData2] = useState([]);
   const [loading, setLoading] = useState(true);
   const [lang] = useState(localStorage.getItem('lang') || 'hy');
 
@@ -30,6 +31,19 @@ const Categories = () => {
       }
     };
 
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("https://shinflex.am/SFApi/Category/");
+        const result = await response.json();
+        setData2(result[5]);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
     fetchData();
   }, []);
 
@@ -69,7 +83,7 @@ const Categories = () => {
 
       <div className="top_offers">
         <PiSealPercentLight className='toolsIcon' />
-        <p className='topOffer'>Top Offers</p>
+        <p className='topOffer'>{handleGetData(lang, [data2.name_en, data2.name_ru, data2.name_hy])}</p>
       </div>
     </div>
   );

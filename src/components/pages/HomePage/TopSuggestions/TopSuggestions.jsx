@@ -1,28 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/swiper-bundle.css";
-import Example from '../../../../assets/photos/11_03.webp'
 import "./TopSuggestions.css";
-
-const product = {
-    imageUrl: Example,
-    title: "Milwaukee 2458-21 M12 Cordless Palm Nailer",
-    price: "1000֏",
-    oldPrice: "2000֏",
-    discount: "-20%",
-}
+import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from "react-icons/md";
 
 const TopSuggestions = () => {
+    const [data, setData] = useState([]);
+    const [show, setShow] = useState(false);
+    const [lang] = useState(localStorage.getItem('lang') || 'hy');
+    const [isEntered, setIsEntered] = useState(null);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch("https://shinflex.am/SFApi/Product/");
+                const result = await response.json();
+                setData(result);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        setShow(data.some(item => item.sale));
+    }, [data]);
+
+    const handleGetData = (lang, [en, ru, hy]) => {
+        return lang === 'en' ? en : lang === 'ru' ? ru : hy;
+    };
+
+    const handleProductClick = (product) => {
+        navigate('/product-details', { state: product });
+    };
+
     return (
         <div className="slider-container">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h2 style={{ marginBottom: '12px'}}>ԹՈՓ ԱՌԱՋԱՐԿՆԵՐ</h2>
-                <div className="slider-buttons" style={{ marginBottom: '14px'}}>
-                    <button className="prev-btn">&lt;</button>
-                    <button className="next-btn">&gt;</button>
+            {show && <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h2 style={{ marginBottom: '12px' }}>ԹՈՓ ԱՌԱՋԱՐԿՆԵՐ</h2>
+                <div className="slider-buttons" style={{ marginBottom: '14px' }}>
+                    <button className="prev-btn"><MdOutlineKeyboardArrowLeft style={{ fontSize: '20px', fontWeight: 'bold' }} /></button>
+                    <button className="next-btn"><MdOutlineKeyboardArrowRight style={{ fontSize: '20px', fontWeight: 'bold' }} /></button>
                 </div>
-            </div>
+            </div>}
             <Swiper
                 spaceBetween={10}
                 slidesPerView={4}
@@ -35,32 +59,43 @@ const TopSuggestions = () => {
                 touchRatio={1}
                 grabCursor={true}
                 breakpoints={{
-                    1024: {
-                        slidesPerView: 6,
+                    1500: {
+                        slidesPerView: 7,
                     },
-                    600: {
+                    1024: {
+                        slidesPerView: 5,
+                    },
+                    768: {
+                        slidesPerView: 3,
+                    },
+                    500: {
                         slidesPerView: 2,
                     },
                     300: {
                         slidesPerView: 1,
-                    },
+                    }
                 }}
                 className="product-swiper"
             >
-                {new Array(12).fill(product).map((product, id) => (
+                {data.map((product, id) => (
+                    product.sale &&
                     <SwiperSlide key={id}>
-                        <div className="product-card">
-                            <div className="product-discount">{product.discount}</div>
-                            <img src={product.imageUrl} alt={product.title} className="product-image" />
-                            <h3>{product.title}</h3>
+                        <div className="product-card" onClick={() => handleProductClick(product)} onMouseEnter={() => setIsEntered(id)} onMouseLeave={() => setIsEntered(null)}>
+                            <div className="product-discount">-{product.discount_procent}%</div>
+                            <div className="img_cont">
+                                <img src={isEntered === id ? product.img2 : product.img1} alt={handleGetData(lang, [product.name_en, product.name_ru, product.name_hy])} className="product-image" />
+                            </div>
+                            <h3>{handleGetData(lang, [product.name_en, product.name_ru, product.name_hy])}</h3>
                             <div className="product-price">
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <span style={{ fontSize: '20px', color: '#df3030', fontWeight: 'bold' }}>{product.price}</span>
-                                    <span style={{ marginRight: '15px', color: '#006FCF' }}>Առկա է</span>
+                                    <span style={{ fontSize: '20px', color: '#df3030', fontWeight: 'bold' }}>{parseInt(product.price) * ((100 - product.discount_procent) / 100)}դր․</span>
+                                    <span style={{ marginRight: '15px', color: '#006FCF' }}>{product.count > 0 ? handleGetData(lang, ['Available', 'Доступнo', 'Առկա է']) : handleGetData(lang, ['Unavailable', 'Недоступнo', 'Առկա չէ'])}</span>
                                 </div>
-                                <span className="old-price">{product.oldPrice}</span>
+                                <span className="old-price">{parseInt(product.price)}դր․</span>
                             </div>
-                            <button className="add-to-cart">Ավելացնել</button>
+                            <button className="add-to-cart">
+                                {handleGetData(lang, ['Add to cart', 'Добавить', 'Ավելացնել'])}
+                            </button>
                         </div>
                     </SwiperSlide>
                 ))}

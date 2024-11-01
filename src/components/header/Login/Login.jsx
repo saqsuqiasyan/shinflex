@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
 
 const AuthForm = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [lang] = useState(localStorage.getItem('lang'));
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -11,6 +14,23 @@ const AuthForm = () => {
   const [error, setError] = useState(null);
   const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(isLogin
+          ? 'https://shinflex.am/SFApi/LoginP/'
+          : 'https://shinflex.am/SFApi/RegisterP/'
+        );
+        const result = await response.json();
+        setData(result);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, [isLogin]);
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -49,27 +69,23 @@ const AuthForm = () => {
     try {
       const response = await fetch(url, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestData),
       });
 
-      const contentType = response.headers.get('Content-Type');
+      const result = await response.json();
 
-      if (response.ok && contentType.includes('application/json')) {
-        const result = await response.json();
+      if (response.ok) {
+        const token = result.access;
+        const userFirstName = result.user?.first_name || 'Guest';
 
-        const userFirstName = result.data ? result.data.first_name : null;
+        localStorage.setItem('token', token || 'NoToken');
+        localStorage.setItem('name', userFirstName);
 
-        localStorage.setItem('name', userFirstName ? userFirstName : 'Guest');
-        
         navigate('/');
         window.location.reload();
       } else {
-        const errorMessage = contentType.includes('application/json')
-          ? (await response.json()).detail || `Failed to ${isLogin ? 'login' : 'register'}.`
-          : `Failed to ${isLogin ? 'login' : 'register'}. Server returned an invalid response.`;
+        const errorMessage = result.detail || `Failed to ${isLogin ? 'login' : 'register'}.`;
         setError(errorMessage);
       }
     } catch (error) {
@@ -78,6 +94,11 @@ const AuthForm = () => {
     }
   };
 
+  const handleGetData = (lang, [en, ru, hy]) => {
+    return lang === 'en' ? en : lang === 'ru' ? ru : hy;
+  };
+
+  if (loading) return;
 
   return (
     <div className="auth-container">
@@ -90,14 +111,14 @@ const AuthForm = () => {
               type="text"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
-              placeholder="First Name"
+              placeholder={`${handleGetData(lang, [data[0].fname_en, data[0].fname_ru, data[0].fname_hy])}`}
               className="auth-input"
             />
             <input
               type="text"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
-              placeholder="Last Name"
+              placeholder={`${handleGetData(lang, [data[0].lname_en, data[0].lname_ru, data[0].lname_hy])}`}
               className="auth-input"
             />
           </>
@@ -106,14 +127,14 @@ const AuthForm = () => {
           type="text"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
+          placeholder={`${handleGetData(lang, [data[0].email_en, data[0].email_ru, data[0].email_hy])}`}
           className="auth-input"
         />
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
+          placeholder={`${handleGetData(lang, [data[0].password_en, data[0].password_ru, data[0].password_hy])}`}
           className="auth-input"
         />
         {!isLogin && (
@@ -126,7 +147,7 @@ const AuthForm = () => {
           />
         )}
         <button type="submit" className="auth-button">
-          {isLogin ? 'Sign in' : 'Sign up'}
+          {handleGetData(lang, [data[0].button_en, data[0].button_ru, data[0].button_hy])}
         </button>
       </form>
       <div className="signup">

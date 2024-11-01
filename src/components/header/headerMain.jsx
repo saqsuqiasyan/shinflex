@@ -7,12 +7,14 @@ import { IoMenuSharp } from "react-icons/io5";
 import { GiExitDoor } from "react-icons/gi";
 import { Link } from 'react-router-dom';
 import MenuSM from './MenuSM/MenuSM';
+import Cart from '../pages/Cart/Cart';
 
 const HeaderMain = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [lang] = useState(localStorage.getItem('lang') || 'hy');
   const [sm, setSM] = useState(false);
+  const [showCart, setShowCart] = useState(false);
   const [name, setName] = useState(localStorage.getItem('name') || '');
 
   useEffect(() => {
@@ -31,7 +33,6 @@ const HeaderMain = () => {
   }, []);
 
   useEffect(() => {
-    // Update name state from localStorage when component mounts
     const storedName = localStorage.getItem('name');
     if (storedName) {
       setName(storedName);
@@ -62,7 +63,7 @@ const HeaderMain = () => {
         </div>
       </div>
       <div className='searchItem'>
-        <input type="text" placeholder='Որոնել' />
+        <input type="text" placeholder={`${handleGetData(lang, ['Search...', 'Поиск...', 'Որոնել...'])}`} />
         <FiSearch className='searchIcon' />
       </div>
       <ul className='statsAndInfo'>
@@ -71,16 +72,20 @@ const HeaderMain = () => {
             <FiPhoneCall className='statsIcon' />
             <div>
               <p>{handleGetData(lang, [data[0].call_text_en, data[0].call_text_ru, data[0].call_text_hy])}</p>
-              <span><b>{lang === 'en' ? data[0].call_number_en : lang === 'ru' ? data[0].call_number_ru : data[0].call_number_hy}</b></span>
+              <span><a style={{ color: 'inherit', textDecoration: 'none' }} href={`tel:${handleGetData(lang, [data[0].call_number_en, data[0].call_number_ru, data[0].call_number_hy])}`}>{handleGetData(lang, [data[0].call_number_en, data[0].call_number_ru, data[0].call_number_hy])}</a></span>
             </div>
           </div>
         </li>
         <li>
           <div className='header_data__panel'>
-            {name ? <GiExitDoor className='statsIcon' onClick={() => { localStorage.setItem('name', ''); window.location.reload() }} /> : <Link to="/account/login">
+            {name ? <GiExitDoor className='statsIcon' onClick={() => {
+              localStorage.removeItem('token');
+              localStorage.removeItem('name');
+              window.location.reload();
+            }} /> : <Link to="/account/login">
               <FaRegUser className='statsIcon' />
             </Link>}
-            <div>
+            <div className='remo'>
               <p>{handleGetData(lang, [data[0].login_en, data[0].login_ru, data[0].login_hy])}</p>
               <span><b>{name ? name : <Link to="/account/login" style={{ color: 'inherit', textDecoration: 'none' }}>Log in</Link>}</b></span>
             </div>
@@ -88,8 +93,9 @@ const HeaderMain = () => {
         </li>
         <li>
           <div className='header_data__panel'>
-            <Link to='/pages/wishlist'><FaCartShopping className='statsIcon' /></Link>
-            <div>
+            <FaCartShopping className='statsIcon' onClick={() => setShowCart(true)} />
+            {showCart && <Cart show={() => setShowCart()} />}
+            <div className='remo'>
               <p>{handleGetData(lang, [data[0].user_text_en, data[0].user_text_ru, data[0].user_text_hy])}</p>
               <span><b>0.00 դր.</b></span>
             </div>
@@ -100,4 +106,4 @@ const HeaderMain = () => {
   );
 };
 
-export default HeaderMain
+export default HeaderMain;

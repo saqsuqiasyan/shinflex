@@ -10,7 +10,7 @@ const TopDeals = () => {
     const urls = ['Drillers', 'Hammers', 'Batteries', 'Cutter', 'Power Tools', 'Accessories', 'Hand Tools', 'Multi Tools']
 
     return (
-        <div className='top_deals_container' style={hideTools ? { display: 'none' } : {}} data-aos="fade-in">
+        <div className='top_deals_container' style={hideTools ? { display: 'none' } : {}} data-aos="fade-up">
             <div className="left_hand">
                 <p>shop by</p>
                 <div className="shop_by_items">
@@ -25,7 +25,7 @@ const TopDeals = () => {
             <div className="right_hand">
                 <p>Cutters</p>
                 <div className="items">
-                    {new Array(6).fill(null).map((_, id) => (
+                    {new Array(4).fill(null).map((_, id) => (
                         <div className="item" onClick={() => setHideTools(true)} key={id}>
                             <img src={Example} alt="tool" />
                             <div className="toolInfo">

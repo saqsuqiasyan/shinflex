@@ -1,95 +1,138 @@
-import React, { useState } from "react";
-import "swiper/swiper-bundle.css";
-import Example from '../../../../assets/photos/24.jpg.png'
-import "./Products.css";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './Products.css';
+import Loading from '../../../loading/Loading';
 
-const product = {
-    imageUrl: Example,
-    title: "Milwaukee 2458-21 M12 Cordless Palm Nailer",
-    price: "1000֏",
-};
-
-const Products = () => {
+const Products = ({ mix = { availability: {}, brand: {}, category: {} }, categoryParam }) => {
+    const [data, setData] = useState([]);
+    const [filteredData, setFilteredData] = useState([]);
+    const [isEntered, setIsEntered] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [lang] = useState(localStorage.getItem('lang') || 'hy');
     const [currentPage, setCurrentPage] = useState(1);
     const productsPerPage = 15;
+    const navigate = useNavigate();
 
-    const allProducts = new Array(70).fill(product);
+    const totalPages = Math.ceil(filteredData.length / productsPerPage);
 
-    const indexOfLastProduct = currentPage * productsPerPage;
-    const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-    const currentProducts = allProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch("https://shinflex.am/SFApi/Product/");
+                const result = await response.json();
+                const filtered = result.filter(item => categoryParam ? item.category == parseInt(categoryParam) : item)
+                setData(filtered);
+                setFilteredData(filtered);
+                
+                setLoading(false);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+        fetchData();
+    }, [categoryParam]);
 
-    const totalPages = Math.ceil(allProducts.length / productsPerPage);
+    // Apply filters whenever `mix` changes
+    useEffect(() => {
+        const applyFilters = () => {
+            let filtered = data;
+        
+            // Filter by availability
+            if (mix.availability?.['In stock']) {
+                filtered = filtered.filter(product => product.count > 0 && !product.sale);
+            }
+            if (mix.availability?.['Out of stock']) {
+                filtered = filtered.filter(product => product.count === 0 && !product.sale);
+            }
+        
+            // Filter by brand
+            const selectedBrands = Object.keys(mix.brand || {}).filter(brandId => mix.brand[brandId]);
+            if (selectedBrands.length > 0) {
+                filtered = filtered.filter(product => 
+                    product.brand?.[0]?.toString() && selectedBrands.includes(product.brand[0].toString())
+                );
+            }
+        
+            // Filter by category
+            const selectedCategories = Object.keys(mix.category || {}).filter(categoryId => mix.category[categoryId]);
+            if (selectedCategories.length > 0) {
+                filtered = filtered.filter(product => 
+                    product.category?.[0]?.toString() && selectedCategories.includes(product.category[0].toString())
+                );
+            }
+        
+            setFilteredData(filtered);
+        };        
+
+        applyFilters();
+    }, [mix, data]);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-    const getPageNumbers = () => {
-        const pageNumbers = [];
-        const leftMostPage = Math.max(1, currentPage - 2);
-        const rightMostPage = Math.min(totalPages, currentPage + 2);
-
-        if (leftMostPage > 1) {
-            pageNumbers.push(1);
-            if (leftMostPage > 2) pageNumbers.push("...");
-        }
-
-        for (let i = leftMostPage; i <= rightMostPage; i++) {
-            pageNumbers.push(i);
-        }
-
-        if (rightMostPage < totalPages) {
-            if (rightMostPage < totalPages - 5) pageNumbers.push("...");
-            pageNumbers.push(totalPages);
-        }
-
-        return pageNumbers;
+    const handleGetData = (lang, [en, ru, hy]) => {
+        return lang === 'en' ? en : lang === 'ru' ? ru : hy;
     };
+
+    const handleProductClick = (product) => {
+        navigate('/product-details', { state: product });
+    };
+
+    if (loading) return <Loading />;
 
     return (
         <div className="products-container">
             <div className="slider-container">
-                {currentProducts.map((product, id) => (
-                    <div className="product-card" key={id}>
-                        <img src={product.imageUrl} alt={product.title} className="product-image" />
-                        <h3>{product.title}</h3>
-                        <div className="product-price">
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <span style={{ fontSize: '20px', color: '#df3030', fontWeight: 'bold' }}>
-                                    {product.price}
-                                </span>
-                                <span style={{ marginRight: '15px', color: '#006FCF' }}>Առկա է</span>
+                {filteredData
+                    .slice((currentPage - 1) * productsPerPage, currentPage * productsPerPage)
+                    .map((product, id) => (
+                        !product.sale && (
+                            <div
+                                className="product-card"
+                                onClick={() => handleProductClick(product)}
+                                onMouseEnter={() => setIsEntered(id)}
+                                onMouseLeave={() => setIsEntered(null)}
+                                key={id}
+                            >
+                                <div className="img_cont">
+                                    <img
+                                        src={isEntered === id ? product.img2 : product.img1}
+                                        alt={handleGetData(lang, [product.name_en, product.name_ru, product.name_hy])}
+                                        className="product-image"
+                                    />
+                                </div>
+                                <h3>{handleGetData(lang, [product.name_en, product.name_ru, product.name_hy])}</h3>
+                                <div className="product-price">
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <span style={{ fontSize: '20px', color: '#df3030', fontWeight: 'bold' }}>
+                                            {parseInt(product.price)}դր․
+                                        </span>
+                                        <span
+                                            style={{ marginRight: '15px', color: product.count > 0 ? '#006FCF' : '#DF3030' }}
+                                        >
+                                            {product.count > 0
+                                                ? handleGetData(lang, ['Available', 'Доступнo', 'Առկա է'])
+                                                : handleGetData(lang, ['Unavailable', 'Недоступнo', 'Առկա չէ'])}
+                                        </span>
+                                    </div>
+                                </div>
+                                <button className="add-to-cart" style={{ marginTop: '30px' }}>
+                                    {handleGetData(lang, ['Add to cart', 'Добавить', 'Ավելացնել'])}
+                                </button>
                             </div>
-                        </div>
-                        <button className="add-to-cart">Ավելացնել</button>
-                    </div>
-                ))}
+                        )
+                    ))}
             </div>
 
             <div className="pagination">
-                {currentPage > 1 && <button
-                    onClick={() => paginate(Math.max(1, currentPage - 1))}
-                    className="pagination-button"
-                >
-                    &lt;
-                </button>}
-
-                {getPageNumbers().map((number, index) => (
+                {[...Array(totalPages)].map((_, i) => (
                     <button
-                        key={index}
-                        onClick={() => number !== "..." && paginate(number)}
-                        className={`pagination-button ${currentPage === number ? "active" : ""}`}
-                        disabled={number === "..."}
+                        key={i}
+                        onClick={() => paginate(i + 1)}
+                        className={`pagination-button ${currentPage === i + 1 ? 'active' : ''}`}
                     >
-                        {number}
+                        {i + 1}
                     </button>
                 ))}
-
-                {currentPage < totalPages && <button
-                    onClick={() => paginate(Math.min(totalPages, currentPage + 1))}
-                    className="pagination-button"
-                >
-                    &gt;
-                </button>}
             </div>
         </div>
     );

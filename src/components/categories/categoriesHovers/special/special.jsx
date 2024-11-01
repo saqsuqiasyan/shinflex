@@ -22,7 +22,7 @@ const Special = () => {
     };
 
     return (
-        <div className="special_main" style={hideTools ? { display: 'none' } : {}} data-aos="fade-in">
+        <div className="special_main" style={hideTools ? { display: 'none' } : {}} data-aos="fade-up">
             <div className='special_category_main' >
                 <button className="prev_btn" onClick={handlePrev}>&lt;</button>
                 <ul className="special_category_card" style={{ transform: `translateX(-${currentIndex * (100 / itemsToShow)}%)` }}>

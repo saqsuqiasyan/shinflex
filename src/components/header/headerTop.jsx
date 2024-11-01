@@ -48,26 +48,26 @@ const HeaderTop = () => {
     return <div>No data available</div>;
   }
 
-  // const handleGetData = (lang, [en, ru, hy]) => {
-  //   return lang === 'en' ? en : lang === 'ru' ? ru : hy
-  // }
+  const handleGetData = (lang, [en, ru, hy]) => {
+    return lang === 'en' ? en : lang === 'ru' ? ru : hy
+  }
 
   return (
     <div className='redContainer'>
       <ul className='topLeftHand'>
         <li>
           <Link to='/pages/about-us' style={{ color: 'inherit', textDecoration: 'none' }}>
-            Մեր մասին
+            {handleGetData(lang, ['About us', 'О нас', 'Մեր մասին'])}
           </Link>
         </li>
         <li>
           <Link to='/blogs/news' style={{ color: 'inherit', textDecoration: 'none' }}>
-            Բլոգ
+            {handleGetData(lang, ['Blog', 'Блог', 'Բլոգ'])}
           </Link>
         </li>
         <li>
           <Link to='/pages/contact' style={{ color: 'inherit', textDecoration: 'none' }}>
-            Կապ
+            {handleGetData(lang, ['Contact', 'Контакт', 'Կապ'])}
           </Link>
         </li>
         <li>
@@ -76,28 +76,13 @@ const HeaderTop = () => {
           </Link>
         </li>
       </ul>
-
-      <p className='saleAbout'>
-        Խնայիր մինչև 20% զեղչ ողջ տեսականու համար օգտագործելով “SHINFLEX24”պրոմոկոդը
-      </p>
-
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <ul className='currencyExchangeContainer'>
-          <select className='currencyExchange'>
-            <option value="AMD">ՀՀ Դրամ (AMD ֏)</option>
-            <option value="RUB">РФ Рубль (RUB ₽)</option>
-            <option value="USD">USA Dollar (USD $)</option>
-          </select>
-        </ul>
-
-        <ul>
-          <select className='currencyExchange' value={lang} onChange={handleChange}>
-            <option value="hy">Հայերեն</option>
-            <option value="ru">Русский</option>
-            <option value="en">English</option>
-          </select>
-        </ul>
-      </div>
+      <ul>
+        <select className='currencyExchange' value={lang} onChange={handleChange}>
+          <option value="hy" style={{ color: '#000' }}>Հայերեն</option>
+          <option value="ru" style={{ color: '#000' }}>Русский</option>
+          <option value="en" style={{ color: '#000' }}>English</option>
+        </select>
+      </ul>
     </div>
   );
 };

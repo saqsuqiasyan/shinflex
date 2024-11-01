@@ -5,6 +5,8 @@ import OurStore from '../categoriesHovers/ourStore/ourStore';
 import AOS from 'aos';
 
 const OurStoreX = () => {
+    const [data, setData] = useState([]);
+    const [lang] = useState(localStorage.getItem('lang') || 'hy');
     const [hover, setHover] = useState(false);
     const hoverTimeout = useRef(null);
 
@@ -29,6 +31,23 @@ const OurStoreX = () => {
         });
     }, []);
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch("https://shinflex.am/SFApi/OurStore/");
+                const result = await response.json();
+                setData(result[0]);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchData();
+    }, []);
+
+    const handleGetData = (lang, [en, ru, hy]) => {
+        return lang === 'en' ? en : lang === 'ru' ? ru : hy;
+    };
+
     return (
         <>
             <div
@@ -37,8 +56,7 @@ const OurStoreX = () => {
                 onMouseLeave={handleMouseLeave}
                 style={{ height: '100%', lineHeight: '60px' }}
             >
-                <Link to='/our-store' style={{ color: '#000', textDecoration: 'none' }} onClick={() => setHover(false)}>
-                    Our Store <IoIosArrowDown className='arrow' />
+                <Link to='/our-store' style={{ color: '#000', textDecoration: 'none' }} onClick={() => setHover(false)}>{handleGetData(lang, [data.category_name_en, data.category_name_ru, data.category_name_hy])} <IoIosArrowDown className='arrow' />
                 </Link>
                 {hover && (
                     <OurStore />

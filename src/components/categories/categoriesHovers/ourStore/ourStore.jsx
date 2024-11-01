@@ -17,7 +17,7 @@ const OurStore = () => {
     }
 
     return (
-        <div className='ourStoreMain' style={hideTools ? { display: 'none' } : {}} data-aos="fade-in">
+        <div className='ourStoreMain' style={hideTools ? { display: 'none' } : {}} data-aos="fade-up">
             <div className="side_left" onClick={() => setHideTools(true)}>
                 <div className="left_side_child">
                     {sidesMapping(airTools)}

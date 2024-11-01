@@ -23,7 +23,7 @@ const Categories = () => {
     }
 
     return (
-        <div className='categories_nav_main' style={hideTools ? { display: 'none' } : {}} data-aos="fade-in">
+        <div className='categories_nav_main' style={hideTools ? { display: 'none' } : {}} data-aos="fade-up">
             <div className="left_hand">
                 {CategoriesLinks.map((_, id) => (
                     <div key={id} className='child' onClick={() => setHideTools(true)}>
