@@ -1,29 +1,83 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import Example from '../../../../assets/photos/driller.png'
-import './ourStore.css'
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import Example from '../../../../assets/photos/driller.png';
+import './ourStore.css';
 
 const OurStore = () => {
     const [hideTools, setHideTools] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [data, setData] = useState([]);
+    const [lang] = useState(localStorage.getItem('lang') || 'hy');
+    const [subData, setSubData] = useState([]);
 
-    const airTools = ['Air Tools', 'Pipe Cutters', 'Air Compressors', 'Grinding Air Tools', 'Pneumatic Impact', 'Angle Grinders']
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch("https://shinflex.am/SFApi/OurStore/");
+                const result = await response.json();
+                setData(result);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
 
-    const handTools = ['Hand Tools', 'Straight Grinders', 'Hand Measure', 'Pliers & Cutters', 'Screwdrivers', 'SDS-Plus Drill']
+    useEffect(() => {
+        const fetchSubData = async () => {
+            try {
+                const response = await fetch("https://shinflex.am/SFApi/OurStoreSub/");
+                const result = await response.json();
+                setSubData(result);
+            } catch (error) {
+                console.error("Error fetching sub-data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchSubData();
+    }, []);
 
-    const sidesMapping = (store) => {
-        return store.map((el, id) => (
-            <p key={id}><Link style={id === 0 ? { color: 'inherit', textDecoration: 'none', fontSize: '18px' } : { color: 'inherit', textDecoration: 'none', fontWeight: 'normal' }} to={`/collections/${el === 'Pliers & Cutters' ? 'pliers-cutters' : el.toLowerCase().replace(' ', '-')}`}>{el}</Link></p>
-        ))
-    }
+    const handleGetData = (lang, [en, ru, hy]) => {
+        return lang === 'en' ? en : lang === 'ru' ? ru : hy;
+    };
+
+    if (loading) return;
+
+    const sidesMapping = (subStore, category) => {
+        const filtered = subStore.filter(item => item.category === category);
+        return filtered.map((el, id) => (
+            <p key={id}>
+                {/* to={'/collections/' + el.subcategory_en.toLowerCase().replaceAll(' ', '-')} */}
+                <Link style={{ color: 'inherit', textDecoration: 'none', fontWeight: 'normal' }}>{handleGetData(lang, [el.subcategory_en, el.subcategory_ru, el.subcategory_hy])}</Link>
+            </p>
+        ));
+    };
 
     return (
         <div className='ourStoreMain' style={hideTools ? { display: 'none' } : {}} data-aos="fade-up">
             <div className="side_left" onClick={() => setHideTools(true)}>
                 <div className="left_side_child">
-                    {sidesMapping(airTools)}
+                    {data[0] && (
+                        <>
+                            <p style={{ textDecoration: 'none', fontSize: '18px' }}>
+                                {handleGetData(lang, [data[0].category_name_en, data[0].category_name_ru, data[0].category_name_hy])}
+                            </p>
+                            {sidesMapping(subData, 1)}
+                        </>
+                    )}
                 </div>
                 <div className="left_side_child">
-                    {sidesMapping(handTools)}
+                    {data[1] && (
+                        <>
+                            <p style={{ textDecoration: 'none', fontSize: '18px' }}>
+                                {handleGetData(lang, [data[1].category_name_en, data[1].category_name_ru, data[1].category_name_hy])}
+                            </p>
+                            {sidesMapping(subData, 2)}
+                        </>
+                    )}
                 </div>
             </div>
             <div className="side_right">
@@ -47,7 +101,7 @@ const OurStore = () => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default OurStore
+export default OurStore;

@@ -1,33 +1,89 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import Example from '../../../../assets/photos/11_03.webp'
 import { IoStar } from 'react-icons/io5'
 import './Categories.css'
 
 const Categories = () => {
-    const [hideTools, setHideTools] = useState(false)
+    const [products, setProducts] = useState([]);
+    const [hideTools, setHideTools] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [data, setData] = useState([]);
+    const [lang] = useState(localStorage.getItem('lang') || 'hy');
+    const [subData, setSubData] = useState([]);
 
-    const CategoriesLinks = [
-        ['Accessories', 'Batteries', 'Cable Reels', 'Chargers', 'Hammers'],
-        ['Cutter', 'Bits', 'Work Apparel', 'Tool Accessories', 'Abrasives'],
-        ['Drillers', 'Core Drill', 'Drill Drivers', 'Hammer Drills', 'Impact Drills'],
-        ['Cutter Tools', 'Cable Cutters', 'Mitre Clamps', 'Scissors', 'Multi Tools'],
-        ['Pounding', 'Electric Power', 'Washers', 'Cordless Tools', 'Nailers'],
-        ['Power Tools', 'Pliers Sockets', 'Prying', 'Wrenches', 'Snips'],
-    ]
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch("https://shinflex.am/SFApi/Product/");
+                const result = await response.json();
+                setProducts(result.filter(b => b.bselling).slice(0, 4));
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
 
-    const sidesMapping = (store) => {
-        return store.map((el, id) => (
-            <p key={id}><Link style={id === 0 ? { color: 'inherit', textDecoration: 'none', fontSize: '18px' } : { color: 'inherit', textDecoration: 'none', fontWeight: 'normal' }} to={`/categories/${el.toLowerCase().replace(' ', '-')}`}>{el}</Link></p>
-        ))
-    }
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch("https://shinflex.am/SFApi/Category/");
+                const result = await response.json();
+                setData(result.slice(0, 6));
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        const fetchSubData = async () => {
+            try {
+                const response = await fetch("https://shinflex.am/SFApi/CategorySub/");
+                const result = await response.json();
+                setSubData(result);
+            } catch (error) {
+                console.error("Error fetching sub-data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchSubData();
+    }, []);
+
+    const handleGetData = (lang, [en, ru, hy]) => {
+        return lang === 'en' ? en : lang === 'ru' ? ru : hy;
+    };
+
+    if (loading) return;
+
+    const sidesMapping = (subStore, category) => {
+        const filtered = subStore.filter(item => item.category === category);
+        return filtered.map((el, id) => (
+            <p key={id}>
+                {/* to={'/collections/' + el.subcategory_en.toLowerCase().replaceAll(' ', '-')} */}
+                <Link style={{ color: 'inherit', textDecoration: 'none', fontWeight: 'normal' }}>{handleGetData(lang, [el.subcategory_en, el.subcategory_ru, el.subcategory_hy])}</Link>
+            </p>
+        ));
+    };
+
+    const handleProductClick = (product) => {
+        navigate('/product-details', { state: product });
+    };
 
     return (
         <div className='categories_nav_main' style={hideTools ? { display: 'none' } : {}} data-aos="fade-up">
             <div className="left_hand">
-                {CategoriesLinks.map((_, id) => (
-                    <div key={id} className='child' onClick={() => setHideTools(true)}>
-                        {sidesMapping(CategoriesLinks[id])}
+                {data.map((item, id) => (
+                    <div className='child' onClick={() => setHideTools(true)} key={id}>
+                        <p style={{ textDecoration: 'none', fontSize: '18px' }}>{handleGetData(lang, [item.category_name_en, item.category_name_ru, item.category_name_hy])}</p>
+                        {sidesMapping(subData, item.id)}
                     </div>
                 ))}
             </div>
@@ -36,14 +92,14 @@ const Categories = () => {
                 <p className="best_selling">Best Selling</p>
 
                 <div className="items">
-                    {new Array(4).fill(null).map((_, id) => (
+                    {products.map((item, id) => (
                         <div className="item" key={id}>
                             <div className="image">
-                                <img src={Example} alt="Tool" />
+                                <img src={item.img1} alt="Tool" style={{transform: 'scale(0.6)'}} />
                             </div>
                             <div className="stats">
                                 <p className="name" onClick={() => setHideTools(true)}>
-                                    Lorem ipsum dolor sit amet consectetur adipisicing.
+                                    {handleGetData(lang, [item.name_en, item.name_ru, item.name_hy])}
                                 </p>
                                 <div className="rating">
                                     {new Array(5).fill(null).map((_, index) =>
@@ -51,7 +107,7 @@ const Categories = () => {
                                     }
                                     <span className='rating_number'>(0)</span>
                                 </div>
-                                <p className="price">1.00</p>
+                                <p className="price">{parseInt(item.price)}դր․</p>
                             </div>
                         </div>
                     ))}

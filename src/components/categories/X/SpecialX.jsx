@@ -37,7 +37,7 @@ const SpecialX = (props) => {
                 onMouseLeave={handleMouseLeave}
                 style={{ height: '100%', lineHeight: '60px' }}
             >
-                <Link to='/collections/sale-collection' style={{ color: '#000', textDecoration: 'none' }} onClick={() => setHover(false)}>
+                <Link to='/collections/sale-collection/_' style={{ color: '#000', textDecoration: 'none' }} onClick={() => setHover(false)}>
                     {props.label}
                 </Link>
                 <span className='sale'>sale</span> <IoIosArrowDown className='arrow' style={{ marginTop: '20px' }} />

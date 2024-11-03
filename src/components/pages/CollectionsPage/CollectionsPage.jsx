@@ -5,7 +5,7 @@ import { useLocation, useParams } from 'react-router-dom'
 import Loading from '../../loading/Loading.jsx'
 
 const CollectionsPage = () => {
-  const { category } = useParams();
+  // const { category } = useParams();
   const { categoryID } = useParams();
   const location = useLocation();
   const [products, setProducts] = useState([])
@@ -17,7 +17,7 @@ const CollectionsPage = () => {
       try {
         const response = await fetch("https://shinflex.am/SFApi/Product/");
         const result = await response.json();
-        const filtered = result.filter(item => item.category == categoryID)
+        const filtered = categoryID !== '_' ? result.filter(item => item.category == categoryID) : result;
         setProducts(filtered);
         setLoading(false);
       } catch (error) {
@@ -32,7 +32,7 @@ const CollectionsPage = () => {
   return (
     <div style={{ display: 'flex' }}>
       <Filter setMix={setFilterActions} products={products} />
-      <Products mix={filterActions} categoryParam={categoryID} />
+      <Products mix={filterActions} categoryParam={categoryID !== '_' ? categoryID : null} />
     </div>
   )
 }

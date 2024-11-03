@@ -13,9 +13,9 @@ const ElementsX = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch("https://shinflex.am/SFApi/Category/");
+                const response = await fetch("https://shinflex.am/SFApi/Elements/");
                 const result = await response.json();
-                setData(result[4]);
+                setData(result[0]);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }

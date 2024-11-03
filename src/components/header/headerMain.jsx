@@ -16,6 +16,25 @@ const HeaderMain = () => {
   const [sm, setSM] = useState(false);
   const [showCart, setShowCart] = useState(false);
   const [name, setName] = useState(localStorage.getItem('name') || '');
+  const [cartCount, setCartCount] = useState(parseInt(localStorage.getItem('cartCount') || '0'));
+  const [callRemoveElement, setCallRemoveElement] = useState(false);
+
+  useEffect(() => {
+    const updateCartCount = () => {
+        const count = parseInt(localStorage.getItem('cartCount') || '0');
+        setCartCount(count);
+    };
+
+    window.addEventListener('storage', updateCartCount);
+    window.addEventListener('cartUpdated', updateCartCount);
+
+    updateCartCount();
+
+    return () => {
+        window.removeEventListener('storage', updateCartCount);
+        window.removeEventListener('cartUpdated', updateCartCount);
+    };
+}, [showCart]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -92,9 +111,27 @@ const HeaderMain = () => {
           </div>
         </li>
         <li>
-          <div className='header_data__panel'>
-            <FaCartShopping className='statsIcon' onClick={() => setShowCart(true)} />
-            {showCart && <Cart show={() => setShowCart()} />}
+          <div className='header_data__panel' style={{ position: 'relative' }}>
+            <div style={{ position: 'relative' }}>
+              <FaCartShopping className='statsIcon' onClick={() => setShowCart(true)} />
+              {showCart && <Cart show={() => setShowCart(false)} setCallRemoveElement={setCallRemoveElement} />}
+              {cartCount > 0 && (
+                <span style={{
+                  position: 'absolute',
+                  top: '-5px',
+                  right: '-10px',
+                  backgroundColor: 'red',
+                  color: 'white',
+                  borderRadius: '50%',
+                  padding: '4px 8px',
+                  fontSize: '12px',
+                  fontWeight: 'bold',
+                  lineHeight: '1',
+                }}>
+                  {cartCount}
+                </span>
+              )}
+            </div>
             <div className='remo'>
               <p>{handleGetData(lang, [data[0].user_text_en, data[0].user_text_ru, data[0].user_text_hy])}</p>
               <span><b>0.00 դր.</b></span>

@@ -24,7 +24,7 @@ const AuthForm = () => {
         );
         const result = await response.json();
         setData(result);
-        setLoading(false);
+        setLoading(false);        
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -142,7 +142,7 @@ const AuthForm = () => {
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder="Confirm Password"
+            placeholder={`${handleGetData(lang, [data[0].con_password_en, data[0].con_password_ru, data[0].con_password_hy])}`}
             className="auth-input"
           />
         )}

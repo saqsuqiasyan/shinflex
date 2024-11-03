@@ -102,6 +102,7 @@ const Filter = ({ setMix, products }) => {
                                 <div className="filter-checkbox" key={item}>
                                     <input
                                         id={`filter-check${item}`}
+                                        style={{ accentColor: '#DF3030' }}
                                         type="checkbox"
                                         checked={!!filters.availability[item]}
                                         onChange={() => handleCheckboxChange('availability', item)}
@@ -116,6 +117,7 @@ const Filter = ({ setMix, products }) => {
                                     <div className="filter-checkbox" key={brand.id}>
                                         <input
                                             id={`filter-check${brand.id}`}
+                                            style={{ accentColor: '#DF3030' }}
                                             type="checkbox"
                                             checked={!!filters.brand[brand.id]}
                                             onChange={() => handleCheckboxChange('brand', brand.id)}
@@ -131,6 +133,7 @@ const Filter = ({ setMix, products }) => {
                                             <input
                                                 id={`filter-Check${category.id}`}
                                                 type="checkbox"
+                                                style={{ accentColor: '#DF3030' }}
                                                 checked={!!filters.category[category.id]}
                                                 onChange={() => handleCheckboxChange('category', category.id)}
                                             />

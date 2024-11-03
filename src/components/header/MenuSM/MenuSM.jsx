@@ -1,9 +1,13 @@
-import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import './MenuSM.css';
 import AOS from 'aos';
 
 const MenuSM = ({ sm }) => {
+    const location = useLocation();
+    const [categories, setCategories] = useState([]);
+    const [lang] = useState(localStorage.getItem('lang') || 'hy');
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         AOS.init({
@@ -18,6 +22,37 @@ const MenuSM = ({ sm }) => {
         };
     }, []);
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true)
+                const response = await fetch('https://shinflex.am/SFApi/Category/');
+                const result = await response.json();
+                setCategories(result);
+                setLoading(false);                
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const handleGetData = (lang, [en, ru, hy]) => {
+        return lang === 'en' ? en : lang === 'ru' ? ru : hy;
+    };
+
+    if (loading) return;
+
+    const scrollToSaleCollection = (id) => {
+        const saleCollectionElement = document.getElementById(id);
+        if (saleCollectionElement) {
+            saleCollectionElement.scrollIntoView({ behavior: 'smooth' });
+        }
+        sm(false);
+    };
+
     return (
         <div className="menuSM_full">
             <div className='menuSM_main' data-aos="fade-right">
@@ -26,31 +61,38 @@ const MenuSM = ({ sm }) => {
                     <button className="close-btn" onClick={() => sm(false)}>✕</button>
                 </div>
                 <ul>
-                    <li><Link onClick={() => sm(false)} to="/">Home</Link></li>
+                    <li><Link onClick={() => sm(false)} to="/">
+                        {handleGetData(lang, ['Home', 'Главный', 'Գլխավոր'])}
+                    </Link></li>
+                    {location.pathname === '/' && <li>
+                        <Link onClick={() => scrollToSaleCollection('all-products')}>
+                        {handleGetData(lang, ['Our Store', 'Наш магазин', 'Մեր Խանութ'])}
+                        </Link>
+                    </li>}
                     <li>
-                        <Link to="/our-store" onClick={() => sm(false)}>Our Store</Link>
-                    </li>
-                    <li>
-                        <Link to="/special" onClick={() => sm(false)}>
-                            Special <span className="label sale">SALE</span>
+                        <Link to="/collections/sale-collection/_" onClick={() => sm(false)}>
+                        {handleGetData(lang, ['Special', 'Специальный', 'Հատուկ'])}
+                        <span className="label sale">SALE</span>
                         </Link>
                     </li>
                     <li>
-                        <Link to="/categories" onClick={() => sm(false)}>
-                            Categories <span className="label hot">HOT</span>
+                        <Link to="/collections/sale-collection/_" onClick={() => sm(false)}>
+                    {handleGetData(lang, ['Categories', 'Категории', 'Կատեգորիաներ'])}
+                            
+                             <span className="label hot">HOT</span>
                         </Link>
                     </li>
-                    <li><Link onClick={() => sm(false)} to="/top-deals">Top Deals</Link></li>
-                    <li><Link onClick={() => sm(false)} to="/collections">Elements</Link></li>
-                    <li><Link onClick={() => sm(false)} to="/abrasives">Abrasives</Link></li>
-                    <li><Link onClick={() => sm(false)} to="/cutter-tools">Cutter Tools</Link></li>
-                    <li><Link onClick={() => sm(false)} to="/hammers">Hammers</Link></li>
-                    <li><Link onClick={() => sm(false)} to="/nailers">Nailers</Link></li>
-                    <li><Link onClick={() => sm(false)} to="/scissors">Scissors</Link></li>
-                    <li><Link onClick={() => sm(false)} to="/washers">Washers</Link></li>
-                    <li><Link onClick={() => sm(false)} to="/power-tools">Power Tools</Link></li>
-                    <li><Link onClick={() => sm(false)} to="/chargers">Chargers</Link></li>
-                    <li><Link onClick={() => sm(false)} to="/impact-drills">Impact Drills</Link></li>
+                    {location.pathname === '/' && <li><Link onClick={() => scrollToSaleCollection('sale-collection')}>
+                    {handleGetData(lang, ['Top Offers', 'Лучшие предложения', 'Լավագույն առաջարկներ'])}
+                    </Link></li>}
+
+                    {categories.map((item, id) => (
+                        <li key={id}>
+                            <Link onClick={() => sm(false)} to={`/collections/${item.category_name_en.toLowerCase().replaceAll(' ', '-')}/${item.id}`}>
+                                {handleGetData(lang, [item.category_name_en, item.category_name_ru, item.category_name_hy])}
+                            </Link>
+                        </li>
+                    ))}
                     
                     <div className="menu-footer">
                         <div className="social-icons">

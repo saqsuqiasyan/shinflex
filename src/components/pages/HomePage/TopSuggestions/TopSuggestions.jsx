@@ -39,7 +39,7 @@ const TopSuggestions = () => {
     };
 
     return (
-        <div className="slider-container">
+        <div className="slider-container" id="sale-collection">
             {show && <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h2 style={{ marginBottom: '12px' }}>ԹՈՓ ԱՌԱՋԱՐԿՆԵՐ</h2>
                 <div className="slider-buttons" style={{ marginBottom: '14px' }}>

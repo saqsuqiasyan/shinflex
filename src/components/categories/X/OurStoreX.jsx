@@ -48,16 +48,24 @@ const OurStoreX = () => {
         return lang === 'en' ? en : lang === 'ru' ? ru : hy;
     };
 
+    const scrollToSaleCollection = () => {
+        const saleCollectionElement = document.getElementById('all-products');
+        if (saleCollectionElement) {
+            saleCollectionElement.scrollIntoView({ behavior: 'smooth' });
+        }
+        setHover(false)
+    };
+
     return (
         <>
             <div
                 className="store_categories"
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
-                style={{ height: '100%', lineHeight: '60px' }}
+                style={{ height: '100%', lineHeight: '60px', cursor: 'pointer' }}
             >
-                <Link to='/our-store' style={{ color: '#000', textDecoration: 'none' }} onClick={() => setHover(false)}>{handleGetData(lang, [data.category_name_en, data.category_name_ru, data.category_name_hy])} <IoIosArrowDown className='arrow' />
-                </Link>
+                <p style={{ color: '#000' }} onClick={scrollToSaleCollection}>{handleGetData(lang, [data.name_en, data.name_ru, data.name_hy])} <IoIosArrowDown className='arrow' />
+                </p>
                 {hover && (
                     <OurStore />
                 )}

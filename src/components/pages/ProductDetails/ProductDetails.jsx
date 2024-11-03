@@ -35,23 +35,23 @@ const ProductDetails = () => {
             alert('Out of stock.');
             return;
         }
-
+    
         if (quantity > product.count) {
             alert('You can only add up to the available quantity.');
             return;
         }
-
+    
         const token = localStorage.getItem('token');
-
+    
         if (!token) {
             alert('Please log in to add items to the cart.');
             navigate('/account/login');
             return;
         }
-
+    
         try {
             const cartId = 1;
-
+    
             const response = await fetch('https://shinflex.am/SFApi/cart-items/', {
                 method: 'POST',
                 headers: {
@@ -64,9 +64,12 @@ const ProductDetails = () => {
                     quantity,
                 }),
             });
-
+    
             if (response.ok) {
                 alert('Product added to cart!');
+                const currentCartCount = parseInt(localStorage.getItem('cartCount') || '0');
+                localStorage.setItem('cartCount', currentCartCount + quantity);
+                window.dispatchEvent(new Event('cartUpdated'));
             } else {
                 const errorData = await response.json();
                 console.error('Failed to add item to cart:', errorData);
@@ -76,9 +79,9 @@ const ProductDetails = () => {
             console.error('Error:', error);
             alert('An error occurred. Please try again later.');
         }
-
-        navigate('/')
-    };
+    
+        navigate('/');
+    };    
 
     const handleGetData = (lang, [en, ru, hy]) => {
         return lang === 'en' ? en : lang === 'ru' ? ru : hy;

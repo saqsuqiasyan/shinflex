@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Products.css';
-import Loading from '../../../loading/Loading';
 
 const Products = ({ mix = { availability: {}, brand: {}, category: {} }, categoryParam }) => {
     const [data, setData] = useState([]);
@@ -32,28 +31,24 @@ const Products = ({ mix = { availability: {}, brand: {}, category: {} }, categor
         fetchData();
     }, [categoryParam]);
 
-    // Apply filters whenever `mix` changes
     useEffect(() => {
         const applyFilters = () => {
             let filtered = data;
-        
-            // Filter by availability
+
             if (mix.availability?.['In stock']) {
                 filtered = filtered.filter(product => product.count > 0 && !product.sale);
             }
             if (mix.availability?.['Out of stock']) {
                 filtered = filtered.filter(product => product.count === 0 && !product.sale);
             }
-        
-            // Filter by brand
+
             const selectedBrands = Object.keys(mix.brand || {}).filter(brandId => mix.brand[brandId]);
             if (selectedBrands.length > 0) {
                 filtered = filtered.filter(product => 
                     product.brand?.[0]?.toString() && selectedBrands.includes(product.brand[0].toString())
                 );
             }
-        
-            // Filter by category
+
             const selectedCategories = Object.keys(mix.category || {}).filter(categoryId => mix.category[categoryId]);
             if (selectedCategories.length > 0) {
                 filtered = filtered.filter(product => 
@@ -77,10 +72,10 @@ const Products = ({ mix = { availability: {}, brand: {}, category: {} }, categor
         navigate('/product-details', { state: product });
     };
 
-    if (loading) return <Loading />;
+    if (loading) return;
 
     return (
-        <div className="products-container">
+        <div className="products-container" id='all-products'>
             <div className="slider-container">
                 {filteredData
                     .slice((currentPage - 1) * productsPerPage, currentPage * productsPerPage)

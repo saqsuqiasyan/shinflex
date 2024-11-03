@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './Cart.css';
 import { useNavigate } from 'react-router-dom';
-import { FaTrash, FaTimes } from 'react-icons/fa';
+import { FaTrash } from 'react-icons/fa';
 import AOS from 'aos';
 
 const Cart = ({ show }) => {
@@ -10,6 +10,7 @@ const Cart = ({ show }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [totalPrice, setTotalPrice] = useState(0);
+    const [callRemove, setCallRemove] = useState(false);
     const navigate = useNavigate();
 
     const token = localStorage.getItem('token');
@@ -64,6 +65,9 @@ const Cart = ({ show }) => {
                 }
 
                 const data = await response.json();
+
+                const totalQuantity = data.reduce((sum, item) => sum + item.quantity, 0);
+                localStorage.setItem('cartCount', totalQuantity);
                 setCartItems(data);
             } catch (err) {
                 setError(err.message);
@@ -78,7 +82,7 @@ const Cart = ({ show }) => {
             show(false);
             navigate('/account/login');
         }
-    }, [token]);
+    }, [token, callRemove]);
 
     useEffect(() => {
         const total = cartItems.reduce((total, item) => {
@@ -101,14 +105,22 @@ const Cart = ({ show }) => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-
+    
             if (!response.ok) {
                 throw new Error('Failed to delete item from cart');
             }
-
-            setCartItems((prevItems) =>
-                prevItems.filter(item => item.product !== productId)
-            );
+    
+            setCartItems((prevItems) => {
+                const updatedItems = prevItems.filter(item => item.product !== productId);
+    
+                const totalQuantity = updatedItems.reduce((sum, item) => sum + item.quantity, 0);
+                localStorage.setItem('cartCount', totalQuantity);
+    
+                return updatedItems;
+            });
+    
+            setCallRemove((prev) => !prev);
+            window.dispatchEvent(new Event('cartUpdated'));
         } catch (error) {
             console.error('Error deleting item:', error);
         }
@@ -123,6 +135,7 @@ const Cart = ({ show }) => {
                     await deleteItemFromCart(item.id);
                 })
             );
+
         } catch (error) {
             console.error('Failed to remove items from cart:', error);
         }
@@ -162,8 +175,8 @@ const Cart = ({ show }) => {
                             const productData = data.find(el => el.id === item.product);
                             if (productData) {
                                 return (
-                                    <li key={idx} className="cart-item" onClick={() => handleProductClick(data[idx])}>
-                                        <img src={productData.img1} alt={productData.name} />
+                                    <li key={idx} className="cart-item">
+                                        <img src={productData.img1} alt={productData.name} onClick={() => handleProductClick(data[idx])} />
                                         <div>
                                             <h3 style={{ color: '#000' }}>{productData.name}</h3>
                                             <p style={{ color: '#000' }}>

@@ -7,16 +7,21 @@ import BrowseCategoriesX from './X/BrowseCategoriesX.jsx'
 import OurStoreX from './X/OurStoreX.jsx';
 import SpecialX from './X/SpecialX.jsx';
 import CategoriesX from './X/CategoriesX.jsx';
-import TopDealsX from './X/TopDealsX.jsx';
 import ElementsX from './X/ElementsX.jsx';
 import { FiSearch } from 'react-icons/fi';
 import Loading from '../loading/Loading.jsx'
 
 const Categories = () => {
   const [data, setData] = useState(null);
-  const [data2, setData2] = useState([]);
   const [loading, setLoading] = useState(true);
   const [lang] = useState(localStorage.getItem('lang') || 'hy');
+
+  const scrollToSaleCollection = () => {
+    const saleCollectionElement = document.getElementById('sale-collection');
+    if (saleCollectionElement) {
+      saleCollectionElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,19 +36,6 @@ const Categories = () => {
       }
     };
 
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("https://shinflex.am/SFApi/Category/");
-        const result = await response.json();
-        setData2(result[5]);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
     fetchData();
   }, []);
 
@@ -65,13 +57,11 @@ const Categories = () => {
 
       <div className="more_categories">
         <div className='categories__container'>
-          <li>
-            <Link to='/' style={{ color: '#000', textDecoration: 'none' }}>{handleGetData(lang, [data[0].home_name_en, data[0].home_name_ru, data[0].home_name_hy])}</Link>
-          </li>
+          <Link to='/' style={{ color: '#000', textDecoration: 'none' }}>{handleGetData(lang, [data[0].home_name_en, data[0].home_name_ru, data[0].home_name_hy])}</Link>
           <OurStoreX />
           <SpecialX label={handleGetData(lang, [data[0].special_name_en, data[0].special_name_ru, data[0].special_name_hy])} />
           <CategoriesX />
-          <TopDealsX />
+          {/* <TopDealsX /> */}
           <ElementsX />
         </div>
       </div>
@@ -83,7 +73,7 @@ const Categories = () => {
 
       <div className="top_offers">
         <PiSealPercentLight className='toolsIcon' />
-        <p className='topOffer'>{handleGetData(lang, [data2.name_en, data2.name_ru, data2.name_hy])}</p>
+        <p className='topOffer' onClick={scrollToSaleCollection}>{handleGetData(lang, [data[0].top_offers_en, data[0].top_offers_ru, data[0].top_offers_hy])}</p>
       </div>
     </div>
   );
