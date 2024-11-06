@@ -31,10 +31,11 @@ const App = () => {
           <Route path="/cutter-tools" element={<CutterToolsPage />} />
           <Route path='/pages/faq' element={<FAQ />} />
           <Route path='/pages/about-us' element={<AboutUs />} />
+          <Route path='/policies/:policy' element={<AboutUs />} />
           <Route path='/pages/contact' element={<Map />} />
-          <Route path='/blogs/news' element={<Blogs/>} />
-          <Route path='/pages/compare' element={<CompareMessage/>} />
-          <Route path='/pages/wishlist' element={<CompareMessage/>} />
+          <Route path='/blogs/news' element={<Blogs />} />
+          <Route path='/pages/compare' element={<CompareMessage />} />
+          <Route path='/pages/wishlist' element={<CompareMessage />} />
           <Route path="/news/post/:id" element={<BlogItem />} />
         </Routes>
       </main>

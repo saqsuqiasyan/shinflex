@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import Example from '../../../../assets/photos/11_03.webp'
 import { IoStar } from 'react-icons/io5'
 import './Categories.css'
 
@@ -11,6 +10,7 @@ const Categories = () => {
     const [data, setData] = useState([]);
     const [lang] = useState(localStorage.getItem('lang') || 'hy');
     const [subData, setSubData] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -68,13 +68,15 @@ const Categories = () => {
         return filtered.map((el, id) => (
             <p key={id}>
                 {/* to={'/collections/' + el.subcategory_en.toLowerCase().replaceAll(' ', '-')} */}
-                <Link style={{ color: 'inherit', textDecoration: 'none', fontWeight: 'normal' }}>{handleGetData(lang, [el.subcategory_en, el.subcategory_ru, el.subcategory_hy])}</Link>
+                <Link style={{ color: 'inherit', textDecoration: 'none', fontWeight: 'normal' }}>
+                {handleGetData(lang, [el.subcategory_en, el.subcategory_ru, el.subcategory_hy])}</Link>
             </p>
         ));
     };
 
     const handleProductClick = (product) => {
         navigate('/product-details', { state: product });
+        setHideTools(true)
     };
 
     return (
@@ -93,7 +95,7 @@ const Categories = () => {
 
                 <div className="items">
                     {products.map((item, id) => (
-                        <div className="item" key={id}>
+                        <div className="item" key={id} onClick={() => handleProductClick(item)}>
                             <div className="image">
                                 <img src={item.img1} alt="Tool" style={{transform: 'scale(0.6)'}} />
                             </div>

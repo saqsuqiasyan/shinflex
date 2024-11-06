@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Blogs.css';
 import Loading from '../../loading/Loading'
 
@@ -7,6 +7,7 @@ const Blogs = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [lang] = useState(localStorage.getItem('lang') || 'hy');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -34,12 +35,14 @@ const Blogs = () => {
     return (
         <div className="blog-list">
             {data.map(post => (
-                <div key={post.id} className="blog-card">
-                    <img src={post.img} alt={handleGetData(lang, [post.name_en, post.name_ru, post.name_hy])} className="blog-image" />
+                <div key={post.id} className="blog-card" onClick={() => navigate(`/news/post/${post.id}`)}>
+                    <div className="blog-image">
+                        <img src={post.img} alt={handleGetData(lang, [post.name_en, post.name_ru, post.name_hy])}  />
+                    </div>
                     <div className="blog-details">
                         <p>{handleGetData(lang, [post.date_en, post.date_ru, post.date_hy])}</p>
-                        <h2><Link style={{ color: 'inherit', textDecoration: 'none' }} to={`/news/post/${post.id}`}>{handleGetData(lang, [post.name_en, post.name_ru, post.name_hy])}</Link></h2>
-                        <Link to={`/news/post/${post.id}`} className="read-more">{handleGetData(lang, [post.but_name_en, post.but_name_ru, post.but_name_hy])}</Link>
+                        <h2>{handleGetData(lang, [post.name_en, post.name_ru, post.name_hy])}</h2>
+                        <span className="read-more">{handleGetData(lang, [post.but_name_en, post.but_name_ru, post.but_name_hy])}</span>
                     </div>
                 </div>
             ))}

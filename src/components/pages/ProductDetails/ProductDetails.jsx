@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import './ProductDetails.css';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import Cart from '../Cart/Cart';
 
 const ProductDetails = () => {
     const { state: product } = useLocation();
     const [lang] = useState(localStorage.getItem('lang') || 'hy');
     const [quantity, setQuantity] = useState(1);
     const [selectedImage, setSelectedImage] = useState(product.img1);
+    const [cartOpen, setCartOpen] = useState(false);
     const navigate = useNavigate();
 
     const images = [
@@ -17,10 +19,10 @@ const ProductDetails = () => {
     ];
 
     useEffect(() => {
-        setSelectedImage(product.img1)
-        scrollTo(0, 0);
-        setQuantity(1)
-    }, [product])
+        setSelectedImage(product.img1);
+        window.scrollTo(0, 0);
+        setQuantity(1);
+    }, [product]);
 
     const handleQuantityChange = (value) => {
         if (quantity + value > 0) setQuantity(quantity + value);
@@ -35,23 +37,23 @@ const ProductDetails = () => {
             alert('Out of stock.');
             return;
         }
-    
+
         if (quantity > product.count) {
             alert('You can only add up to the available quantity.');
             return;
         }
-    
+
         const token = localStorage.getItem('token');
-    
+
         if (!token) {
             alert('Please log in to add items to the cart.');
             navigate('/account/login');
             return;
         }
-    
+
         try {
             const cartId = 1;
-    
+
             const response = await fetch('https://shinflex.am/SFApi/cart-items/', {
                 method: 'POST',
                 headers: {
@@ -64,9 +66,12 @@ const ProductDetails = () => {
                     quantity,
                 }),
             });
-    
+
             if (response.ok) {
                 alert('Product added to cart!');
+                setTimeout(() => {
+                    setCartOpen(true);
+                }, 100);
                 const currentCartCount = parseInt(localStorage.getItem('cartCount') || '0');
                 localStorage.setItem('cartCount', currentCartCount + quantity);
                 window.dispatchEvent(new Event('cartUpdated'));
@@ -79,9 +84,11 @@ const ProductDetails = () => {
             console.error('Error:', error);
             alert('An error occurred. Please try again later.');
         }
-    
-        navigate('/');
-    };    
+
+        setTimeout(() => {
+            navigate('/');
+        }, 1000);
+    };
 
     const handleGetData = (lang, [en, ru, hy]) => {
         return lang === 'en' ? en : lang === 'ru' ? ru : hy;
@@ -89,6 +96,9 @@ const ProductDetails = () => {
 
     return (
         <div className="product-details-container">
+            <div style={{ position: 'absolute', zIndex: '-9999', opacity: '0' }}>
+                {cartOpen && <Cart show={() => setCartOpen(false)} />}
+            </div>
             <div className="left-column">
                 <img src={selectedImage} alt={product.name} className="main-image" />
                 <div className="image-thumbnails">
@@ -127,11 +137,11 @@ const ProductDetails = () => {
                     <button className="buy-now">{handleGetData(lang, ['Buy it now', 'Купить', 'Գնել'])}</button>
                 </div>
 
-                <p className="shipping-info">Shipping & Returns</p>
+                <Link to='/policies/refund-policy' className="shipping-info">{handleGetData(lang, ['Shipping & Returns', 'Доставка и возврат', 'Առաքում և վերադարձ'])}</Link>
             </div>
 
             <div className="description">
-                <h2>Description</h2>
+                <h2>{handleGetData(lang, ['Description', 'Описание', 'Նկարագրություն'])}</h2>
                 <p>{handleGetData(lang, [product.description_en, product.description_ru, product.description_hy])}</p>
             </div>
         </div>

@@ -88,13 +88,16 @@ const Cart = ({ show }) => {
         const total = cartItems.reduce((total, item) => {
             const productData = data.find(el => el.id === item.product);
             if (!productData) return total;
-
+    
             return total + (productData.sale
                 ? item.quantity * (parseFloat(productData.price) * (100 - productData.discount_procent) / 100)
                 : item.quantity * parseFloat(productData.price));
         }, 0);
+        
         setTotalPrice(total);
-    }, [cartItems, data]);
+        localStorage.setItem('totalPrice', total.toFixed(2));
+        window.dispatchEvent(new Event('cartUpdated'));
+    }, [cartItems, data]);    
 
     const deleteItemFromCart = async (productId) => {
         try {
@@ -176,7 +179,7 @@ const Cart = ({ show }) => {
                             if (productData) {
                                 return (
                                     <li key={idx} className="cart-item">
-                                        <img src={productData.img1} alt={productData.name} onClick={() => handleProductClick(data[idx])} />
+                                        <img src={productData.img1} alt={productData.name} onClick={() => handleProductClick(data[productData.id - 1])} />
                                         <div>
                                             <h3 style={{ color: '#000' }}>{productData.name}</h3>
                                             <p style={{ color: '#000' }}>

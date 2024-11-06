@@ -17,24 +17,40 @@ const HeaderMain = () => {
   const [showCart, setShowCart] = useState(false);
   const [name, setName] = useState(localStorage.getItem('name') || '');
   const [cartCount, setCartCount] = useState(parseInt(localStorage.getItem('cartCount') || '0'));
-  const [callRemoveElement, setCallRemoveElement] = useState(false);
+  const [totalPrice, setTotalPrice] = useState(parseInt(localStorage.getItem('totalPrice') || '0'));
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     const updateCartCount = () => {
-        const count = parseInt(localStorage.getItem('cartCount') || '0');
-        setCartCount(count);
+      const count = parseInt(localStorage.getItem('cartCount') || '0');
+      const price = parseFloat(localStorage.getItem('totalPrice') || '0');
+      setCartCount(count);
+      setTotalPrice(price);
     };
 
-    window.addEventListener('storage', updateCartCount);
     window.addEventListener('cartUpdated', updateCartCount);
 
     updateCartCount();
 
     return () => {
-        window.removeEventListener('storage', updateCartCount);
-        window.removeEventListener('cartUpdated', updateCartCount);
+      window.removeEventListener('cartUpdated', updateCartCount);
     };
-}, [showCart]);
+  }, []);
+
+  useEffect(() => {
+    const syncLocalStorage = (event) => {
+      if (event.key === 'cartCount' || event.key === 'totalPrice') {
+        setCartCount(parseInt(localStorage.getItem('cartCount') || '0'));
+        setTotalPrice(parseFloat(localStorage.getItem('totalPrice') || '0'));
+      }
+    };
+
+    window.addEventListener('storage', syncLocalStorage);
+
+    return () => {
+      window.removeEventListener('storage', syncLocalStorage);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,6 +88,9 @@ const HeaderMain = () => {
 
   return (
     <div className='headerMain'>
+      <div style={{ position: 'absolute', zIndex: '-9999', opacity: '0' }}>
+        {token && <Cart show={() => setShowCart(false)} />}
+      </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         <IoMenuSharp className="header_menu_icon" onClick={() => setSM(true)} />
         {sm && <MenuSM sm={() => setSM()} />}
@@ -114,8 +133,8 @@ const HeaderMain = () => {
           <div className='header_data__panel' style={{ position: 'relative' }}>
             <div style={{ position: 'relative' }}>
               <FaCartShopping className='statsIcon' onClick={() => setShowCart(true)} />
-              {showCart && <Cart show={() => setShowCart(false)} setCallRemoveElement={setCallRemoveElement} />}
-              {cartCount > 0 && (
+              {showCart && <Cart show={() => setShowCart(false)} />}
+              {token && cartCount > 0 && (
                 <span style={{
                   position: 'absolute',
                   top: '-5px',
@@ -123,7 +142,7 @@ const HeaderMain = () => {
                   backgroundColor: 'red',
                   color: 'white',
                   borderRadius: '50%',
-                  padding: '4px 8px',
+                  padding: '4px',
                   fontSize: '12px',
                   fontWeight: 'bold',
                   lineHeight: '1',
@@ -134,7 +153,7 @@ const HeaderMain = () => {
             </div>
             <div className='remo'>
               <p>{handleGetData(lang, [data[0].user_text_en, data[0].user_text_ru, data[0].user_text_hy])}</p>
-              <span><b>0.00 դր.</b></span>
+              <span><b>{totalPrice.toFixed(2)} դր․</b></span>
             </div>
           </div>
         </li>
