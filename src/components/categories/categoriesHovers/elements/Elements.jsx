@@ -47,14 +47,6 @@ const Element = () => {
     {
       title: handleGetData(lang, [data[0].page_name4_en, data[0].page_name4_ru, data[0].page_name4_hy]),
       url: '/pages/faq'
-    },
-    {
-      title: handleGetData(lang, [data[0].page_name5_en, data[0].page_name5_ru, data[0].page_name5_hy]),
-      url: '/pages/compare'
-    },
-    {
-      title: handleGetData(lang, [data[0].page_name6_en, data[0].page_name6_ru, data[0].page_name6_hy]),
-      url: '/pages/wishlist'
     }
   ]
 

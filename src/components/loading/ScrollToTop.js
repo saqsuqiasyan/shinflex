@@ -44,7 +44,7 @@ export default function ScrollToTop() {
             justifyContent: "center",
             alignItems: "center",
             zIndex: "9999",
-            bottom: "50px",
+            bottom: "30px",
             right: "30px",
             padding: "10px",
             fontSize: "18px",

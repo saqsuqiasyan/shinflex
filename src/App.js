@@ -14,7 +14,7 @@ import FAQ from './components/pages/FAQ/FAQ.jsx';
 import AboutUs from './components/pages/AboutUs/AboutUs.jsx';
 import Blogs from './components/pages/Blogs/Blogs.jsx';
 import BlogItem from './components/pages/Blogs/BlogItem/BlogItem.jsx';
-import CompareMessage from './components/pages/Compare/CompareWishlistPage.jsx'
+import Policy from './components/pages/Policies/Policy.jsx';
 
 const App = () => {
   return (
@@ -31,11 +31,9 @@ const App = () => {
           <Route path="/cutter-tools" element={<CutterToolsPage />} />
           <Route path='/pages/faq' element={<FAQ />} />
           <Route path='/pages/about-us' element={<AboutUs />} />
-          <Route path='/policies/:policy' element={<AboutUs />} />
+          <Route path='/policies/:policy' element={<Policy />} />
           <Route path='/pages/contact' element={<Map />} />
           <Route path='/blogs/news' element={<Blogs />} />
-          <Route path='/pages/compare' element={<CompareMessage />} />
-          <Route path='/pages/wishlist' element={<CompareMessage />} />
           <Route path="/news/post/:id" element={<BlogItem />} />
         </Routes>
       </main>

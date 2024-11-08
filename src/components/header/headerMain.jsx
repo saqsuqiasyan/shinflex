@@ -5,12 +5,15 @@ import { FaRegUser } from "react-icons/fa";
 import { FaCartShopping } from "react-icons/fa6";
 import { IoMenuSharp } from "react-icons/io5";
 import { GiExitDoor } from "react-icons/gi";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import MenuSM from './MenuSM/MenuSM';
 import Cart from '../pages/Cart/Cart';
+import { isVisible } from '@testing-library/user-event/dist/utils';
 
 const HeaderMain = () => {
   const [data, setData] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [lang] = useState(localStorage.getItem('lang') || 'hy');
   const [sm, setSM] = useState(false);
@@ -19,8 +22,10 @@ const HeaderMain = () => {
   const [cartCount, setCartCount] = useState(parseInt(localStorage.getItem('cartCount') || '0'));
   const [totalPrice, setTotalPrice] = useState(parseInt(localStorage.getItem('totalPrice') || '0'));
   const token = localStorage.getItem('token');
+  const navigate = useNavigate();
 
   useEffect(() => {
+    console.log(search)
     const updateCartCount = () => {
       const count = parseInt(localStorage.getItem('cartCount') || '0');
       const price = parseFloat(localStorage.getItem('totalPrice') || '0');
@@ -36,6 +41,40 @@ const HeaderMain = () => {
       window.removeEventListener('cartUpdated', updateCartCount);
     };
   }, []);
+
+  const handleGetData = (lang, [en, ru, hy]) => {
+    return lang === 'en' ? en : lang === 'ru' ? ru : hy;
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("https://shinflex.am/SFApi/Product/");
+        const result = await response.json();
+
+        const filtered = result.filter(item => {
+          const name = handleGetData(lang, [
+            item.name_en || "",
+            item.name_ru || "",
+            item.name_hy || ""
+          ]);
+
+          return name.toLowerCase().includes(search.toLowerCase());
+        }).slice(0, 5);
+
+        setProducts(filtered);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (search) {
+      fetchData();
+    } else {
+      setProducts([]);
+    }
+  }, [search, lang]);
 
   useEffect(() => {
     const syncLocalStorage = (event) => {
@@ -82,8 +121,10 @@ const HeaderMain = () => {
     return <div>No data available</div>;
   }
 
-  const handleGetData = (lang, [en, ru, hy]) => {
-    return lang === 'en' ? en : lang === 'ru' ? ru : hy;
+  const handleProductClick = (product) => {
+    setProducts([]);
+    setSearch('')
+    navigate('/product-details', { state: product });
   };
 
   return (
@@ -101,8 +142,31 @@ const HeaderMain = () => {
         </div>
       </div>
       <div className='searchItem'>
-        <input type="text" placeholder={`${handleGetData(lang, ['Search...', 'Поиск...', 'Որոնել...'])}`} />
+        <input type="text" placeholder={`${handleGetData(lang, ['Search...', 'Поиск...', 'Որոնել...'])}`} onChange={(e) => setSearch(e.target.value)} value={search} />
         <FiSearch className='searchIcon' />
+        <div className="searchResults" style={{
+          display: search && products.length > 0 ? 'block' : 'none',
+          fontFamily: '"Inter", sans-serif',
+          position: 'absolute',
+          top: '40px',
+          left: '0',
+          width: '100%',
+          zIndex: '9999',
+          backgroundColor: '#fff',
+          borderRadius: '5px',
+          padding: '10px',
+          boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)',
+          maxHeight: '400px',
+          overflowY: 'auto'
+        }}>
+          {products.map((product, id) => (
+            <div className='searchResult' key={id} onClick={() => handleProductClick(product)}>
+              <div>
+                <p>{handleGetData(lang, [product.name_en, product.name_ru, product.name_hy])}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
       <ul className='statsAndInfo'>
         <li id='phone'>

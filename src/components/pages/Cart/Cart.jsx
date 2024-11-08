@@ -11,6 +11,7 @@ const Cart = ({ show }) => {
     const [error, setError] = useState(null);
     const [totalPrice, setTotalPrice] = useState(0);
     const [callRemove, setCallRemove] = useState(false);
+    const [lang] = useState(localStorage.getItem('lang') || 'hy');
     const navigate = useNavigate();
 
     const token = localStorage.getItem('token');
@@ -88,16 +89,16 @@ const Cart = ({ show }) => {
         const total = cartItems.reduce((total, item) => {
             const productData = data.find(el => el.id === item.product);
             if (!productData) return total;
-    
+
             return total + (productData.sale
                 ? item.quantity * (parseFloat(productData.price) * (100 - productData.discount_procent) / 100)
                 : item.quantity * parseFloat(productData.price));
         }, 0);
-        
+
         setTotalPrice(total);
         localStorage.setItem('totalPrice', total.toFixed(2));
         window.dispatchEvent(new Event('cartUpdated'));
-    }, [cartItems, data]);    
+    }, [cartItems, data]);
 
     const deleteItemFromCart = async (productId) => {
         try {
@@ -108,20 +109,20 @@ const Cart = ({ show }) => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-    
+
             if (!response.ok) {
                 throw new Error('Failed to delete item from cart');
             }
-    
+
             setCartItems((prevItems) => {
                 const updatedItems = prevItems.filter(item => item.product !== productId);
-    
+
                 const totalQuantity = updatedItems.reduce((sum, item) => sum + item.quantity, 0);
                 localStorage.setItem('cartCount', totalQuantity);
-    
+
                 return updatedItems;
             });
-    
+
             setCallRemove((prev) => !prev);
             window.dispatchEvent(new Event('cartUpdated'));
         } catch (error) {
@@ -144,6 +145,50 @@ const Cart = ({ show }) => {
         }
     };
 
+    const updateCartQuantity = async (productId, newQuantity) => {
+        try {
+            console.log('Updating quantity for product:', productId);
+    
+            const response = await fetch(`https://shinflex.am/SFApi/cart-items/${productId}/`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ quantity: newQuantity }),
+            });
+            
+    
+            if (!response.ok) {
+                throw new Error('Failed to update cart quantity');
+            }
+    
+            setCartItems(prevItems =>
+                prevItems.map(item =>
+                    item.product === productId ? { ...item, quantity: newQuantity } : item
+                )
+            );
+            
+            window.dispatchEvent(new Event('cartUpdated'));
+        } catch (error) {
+            console.error('Error updating cart quantity:', error);
+        }
+    };
+    
+    const handleIncreaseQuantity = (productId, currentQuantity) => {
+        updateCartQuantity(productId, currentQuantity + 1);
+    };
+    
+    const handleDecreaseQuantity = (productId, currentQuantity) => {
+        if (currentQuantity > 1) {
+            updateCartQuantity(productId, currentQuantity - 1);
+        }
+    };
+
+    const handleGetData = (lang, [en, ru, hy]) => {
+        return lang === 'en' ? en : lang === 'ru' ? ru : hy;
+    };
+
     if (loading) return;
     if (error) console.log(`Error: ${error}`);
 
@@ -158,13 +203,13 @@ const Cart = ({ show }) => {
 
             <div className="cart-drawer" data-aos='fade-left'>
                 <div id='cart-top'>
-                    <h3>Shopping Cart</h3>
+                    <h3>{handleGetData(lang, ['Shopping Cart', 'Корзина', 'Գնումների զամբյուղ'])}</h3>
                     <span className="close-icon" onClick={() => show(false)}>
                         ✕
                     </span>
                 </div>
-                {cartItems.length === 0 ? (
-                    <p>Your cart is empty</p>
+                {!(cartItems.length > 0) ? (
+                    <p>{handleGetData(lang, ['Your cart is empty', 'Ваша корзина пуста', 'Ձեր զամբյուղը դատարկ է'])}</p>
                 ) : (
                     <ul className="cart-items" style={{ marginTop: '70px' }}>
                         {Object.values(cartItems.reduce((acc, item) => {
@@ -187,6 +232,8 @@ const Cart = ({ show }) => {
                                                     ? (parseFloat(productData.price) * ((100 - productData.discount_procent) / 100)).toFixed(2)
                                                     : parseFloat(productData.price).toFixed(2)}դր․
                                             </p>
+                                            <button style={{color: 'red', backgroundColor: 'transparent', padding: '0 5px', border: 'none', fontSize: '20px'}} onClick={() => handleDecreaseQuantity(productData.id, item.id)}>-</button>
+                                            <button style={{color: '#000', backgroundColor: 'transparent', padding: '0 5px', border: 'none', fontSize: '20px'}} onClick={() => handleIncreaseQuantity(productData.id, item.id)}>+</button>
                                         </div>
                                         <button
                                             className="remove-btn"
@@ -202,7 +249,7 @@ const Cart = ({ show }) => {
                     </ul>
                 )}
                 <div className="cart-summary">
-                    <p>Total Price: {totalPrice.toFixed(2)}դր․</p>
+                    <p>{handleGetData(lang, ['Total Price: ', 'Общая стоимость: ', 'Ընդհանուր գինը: ']) + totalPrice.toFixed(2)}դր․</p>
                 </div>
             </div>
         </div>

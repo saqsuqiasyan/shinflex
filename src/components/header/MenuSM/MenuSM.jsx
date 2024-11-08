@@ -11,7 +11,7 @@ const MenuSM = ({ sm }) => {
 
     useEffect(() => {
         AOS.init({
-            duration: 700,
+            duration: 500,
             once: true,
         });
 
@@ -29,7 +29,7 @@ const MenuSM = ({ sm }) => {
                 const response = await fetch('https://shinflex.am/SFApi/Category/');
                 const result = await response.json();
                 setCategories(result);
-                setLoading(false);                
+                setLoading(false);
             } catch (error) {
                 console.error('Error fetching data:', error);
                 setLoading(false);
@@ -61,39 +61,50 @@ const MenuSM = ({ sm }) => {
                     <button className="close-btn" onClick={() => sm(false)}>✕</button>
                 </div>
                 <ul>
-                    <li><Link onClick={() => sm(false)} to="/">
+                    {location.pathname !== '/' && <li><Link onClick={() => sm(false)} to="/">
                         {handleGetData(lang, ['Home', 'Главный', 'Գլխավոր'])}
-                    </Link></li>
-                    {location.pathname === '/' && <li>
-                        <Link onClick={() => scrollToSaleCollection('all-products')}>
-                        {handleGetData(lang, ['Our Store', 'Наш магазин', 'Մեր Խանութ'])}
+                    </Link></li>}
+                    {location.pathname !== '/blogs/news' && <li>
+                        <Link to="/blogs/news" onClick={() => sm(false)}>
+                            {handleGetData(lang, ['Blog', 'Блог', 'Բլոգ'])}
                         </Link>
                     </li>}
-                    <li>
-                        <Link to="/collections/sale-collection/_" onClick={() => sm(false)}>
-                        {handleGetData(lang, ['Special', 'Специальный', 'Հատուկ'])}
-                        <span className="label sale">SALE</span>
+                    {location.pathname !== '/pages/about-us' && <li><Link onClick={() => sm(false)} to="/pages/about-us">
+                        {handleGetData(lang, ['About Us', 'О нас', 'Մեր մասին'])}
+                    </Link></li>}
+                    {location.pathname !== '/pages/contact' && <li><Link onClick={() => sm(false)} to="/pages/contact">
+                        {handleGetData(lang, ['Contact Us', 'Контакты', 'Կապ մեզ հետ'])}
+                    </Link></li>}
+                    {location.pathname !== '/pages/faq' && <li><Link onClick={() => sm(false)} to="/pages/faq">FAQ</Link></li>}
+                    {location.pathname === '/' && <li>
+                        <Link onClick={() => scrollToSaleCollection('all-products')}>
+                            {handleGetData(lang, ['Our Store', 'Наш магазин', 'Մեր Խանութ'])}
                         </Link>
-                    </li>
-                    <li>
+                    </li>}
+                    {location.pathname !== '/collections/sale-collection/_' && <li>
                         <Link to="/collections/sale-collection/_" onClick={() => sm(false)}>
-                    {handleGetData(lang, ['Categories', 'Категории', 'Կատեգորիաներ'])}
-                            
-                             <span className="label hot">HOT</span>
+                            {handleGetData(lang, ['Special', 'Специальный', 'Հատուկ'])}
+                            <span className="label sale">SALE</span>
                         </Link>
-                    </li>
+                    </li>}
+                    {location.pathname !== '/collections/sale-collection/_' && <li>
+                        <Link to="/collections/sale-collection/_" onClick={() => sm(false)}>
+                            {handleGetData(lang, ['Categories', 'Категории', 'Կատեգորիաներ'])}
+                            <span className="label hot">HOT</span>
+                        </Link>
+                    </li>}
                     {location.pathname === '/' && <li><Link onClick={() => scrollToSaleCollection('sale-collection')}>
-                    {handleGetData(lang, ['Top Offers', 'Лучшие предложения', 'Լավագույն առաջարկներ'])}
+                        {handleGetData(lang, ['Top Offers', 'Лучшие предложения', 'Լավագույն առաջարկներ'])}
                     </Link></li>}
 
                     {categories.map((item, id) => (
-                        <li key={id}>
+                        location.pathname !== `/collections/${item.category_name_en.toLowerCase().replaceAll(' ', '-')}/${item.id}` && <li key={id}>
                             <Link onClick={() => sm(false)} to={`/collections/${item.category_name_en.toLowerCase().replaceAll(' ', '-')}/${item.id}`}>
                                 {handleGetData(lang, [item.category_name_en, item.category_name_ru, item.category_name_hy])}
                             </Link>
                         </li>
                     ))}
-                    
+
                     <div className="menu-footer">
                         <div className="social-icons">
                             <a href="/"><i className="fab fa-twitter"></i></a>
