@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/header/header';
 import AbrasivesPage from './components/pages/CollectionsPage/CollectionsPage.jsx';
@@ -17,6 +17,25 @@ import BlogItem from './components/pages/Blogs/BlogItem/BlogItem.jsx';
 import Policy from './components/pages/Policies/Policy.jsx';
 
 const App = () => {
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "F12" || event.keyCode === 123) {
+        event.preventDefault();
+        console.log("F12 is disabled");
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  document.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+  });
+
   return (
     <Router>
       <Header />

@@ -103,7 +103,9 @@ const Slide = () => {
             </div>
 
             <div className="right_hand">
-                <div className="item">
+                <div className="item" style={{
+                    color: '#fff'
+                }}>
                     <div className="info">
                         <p>{handleGetData(lang, [data[0].product_name1_en, data[0].product_name1_ru, data[0].product_name1_hy])}</p>
                         <p>{handleGetData(lang, [data[0].product_price_name1_en, data[0].product_price_name1_ru, data[0].product_price_name1_hy])}</p>
@@ -111,7 +113,10 @@ const Slide = () => {
                     </div>
                     <img src={data[0].product_img1} alt="tool" />
                 </div>
-                <div className="item">
+                <div className="item" style={{
+                    backgroundColor: 'rgb(228, 241, 251)',
+                    color: '#000'
+                }}>
                     <div className="info">
                         <p>{handleGetData(lang, [data[0].product_name2_en, data[0].product_name2_ru, data[0].product_name2_hy])}</p>
                         <p>{handleGetData(lang, [data[0].product_price_name2_en, data[0].product_price_name2_ru, data[0].product_price_name2_hy])}</p>

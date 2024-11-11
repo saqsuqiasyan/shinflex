@@ -11,12 +11,10 @@ const ProductDetails = () => {
     const [cartOpen, setCartOpen] = useState(false);
     const navigate = useNavigate();
 
-    const images = [
-        product.img1,
-        product.img2 || product.img1,
-        product.img3 || product.img1,
-        product.img4 || product.img1
-    ];
+    const images = [product.img1];
+    product.img2 ? images.push(product.img2) : '';
+    product.img3 ? images.push(product.img3) : '';
+    product.img4 ? images.push(product.img4) : '';
 
     useEffect(() => {
         setSelectedImage(product.img1);

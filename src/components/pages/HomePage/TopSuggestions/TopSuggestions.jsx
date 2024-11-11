@@ -41,7 +41,7 @@ const TopSuggestions = () => {
     return (
         <div className="slider-container" id="sale-collection">
             {show && <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h2 style={{ marginBottom: '12px' }}>ԹՈՓ ԱՌԱՋԱՐԿՆԵՐ</h2>
+                <h2 style={{ marginBottom: '12px' }}>{handleGetData(lang, ['TOP OFFERS!', 'ТОП ПРЕДЛОЖЕНИЯ!', 'ԹՈՓ ԱՌԱՋԱՐԿՆԵՐ'])}</h2>
                 <div className="slider-buttons" style={{ marginBottom: '14px' }}>
                     <button className="prev-btn"><MdOutlineKeyboardArrowLeft style={{ fontSize: '20px', fontWeight: 'bold' }} /></button>
                     <button className="next-btn"><MdOutlineKeyboardArrowRight style={{ fontSize: '20px', fontWeight: 'bold' }} /></button>

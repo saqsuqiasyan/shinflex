@@ -8,7 +8,6 @@ import { GiExitDoor } from "react-icons/gi";
 import { Link, useNavigate } from 'react-router-dom';
 import MenuSM from './MenuSM/MenuSM';
 import Cart from '../pages/Cart/Cart';
-import { isVisible } from '@testing-library/user-event/dist/utils';
 
 const HeaderMain = () => {
   const [data, setData] = useState(null);
@@ -25,7 +24,6 @@ const HeaderMain = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(search)
     const updateCartCount = () => {
       const count = parseInt(localStorage.getItem('cartCount') || '0');
       const price = parseFloat(localStorage.getItem('totalPrice') || '0');
@@ -160,9 +158,18 @@ const HeaderMain = () => {
           overflowY: 'auto'
         }}>
           {products.map((product, id) => (
-            <div className='searchResult' key={id} onClick={() => handleProductClick(product)}>
-              <div>
+            <div className='searchResult' key={id} onClick={() => handleProductClick(product)} style={{
+              cursor: 'pointer',
+              padding: '10px 0',
+              borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
+            }}>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
                 <p>{handleGetData(lang, [product.name_en, product.name_ru, product.name_hy])}</p>
+                <b>{product.price}դր․</b>
               </div>
             </div>
           ))}
@@ -189,7 +196,7 @@ const HeaderMain = () => {
             </Link>}
             <div className='remo'>
               <p>{handleGetData(lang, [data[0].login_en, data[0].login_ru, data[0].login_hy])}</p>
-              <span><b>{name ? name : <Link to="/account/login" style={{ color: 'inherit', textDecoration: 'none' }}>Log in</Link>}</b></span>
+              <span>{name ? name : <Link to="/account/login" style={{ color: 'inherit', textDecoration: 'none' }}>Log in</Link>}</span>
             </div>
           </div>
         </li>
@@ -217,7 +224,7 @@ const HeaderMain = () => {
             </div>
             <div className='remo'>
               <p>{handleGetData(lang, [data[0].user_text_en, data[0].user_text_ru, data[0].user_text_hy])}</p>
-              <span><b>{totalPrice.toFixed(2)} դր․</b></span>
+              <span>{token ? totalPrice.toFixed(2) : '0.00'}դր․</span>
             </div>
           </div>
         </li>

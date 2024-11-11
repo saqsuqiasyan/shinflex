@@ -124,9 +124,18 @@ const Categories = () => {
           overflowY: 'auto'
         }}>
           {products.map((product, id) => (
-            <div className='searchResult' key={id} onClick={() => handleProductClick(product)}>
-              <div>
+            <div className='searchResult' key={id} onClick={() => handleProductClick(product)} style={{
+              cursor: 'pointer',
+              padding: '10px',
+              borderBottom: '1px solid rgba(0, 0, 0, 0.1)'
+            }}>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
                 <p>{handleGetData(lang, [product.name_en, product.name_ru, product.name_hy])}</p>
+                <b>{product.price}դր․</b>
               </div>
             </div>
           ))}

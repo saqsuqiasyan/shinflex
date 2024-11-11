@@ -66,7 +66,7 @@ const Footer = () => {
 
                 <div className="footer-help">
                     <h3>{handleGetData(lang, [data[0].need_en, data[0].need_ru, data[0].need_hy])}</h3>
-                    <p>📞 {handleGetData(lang, [data[0].call_en, data[0].call_ru, data[0].call_hy])}</p>
+                    <a href={`tel:${handleGetData(lang, [data[0].call_en, data[0].call_ru, data[0].call_hy])}`} style={{color:'#DF3030', textDecoration: 'none'}}>📞 {handleGetData(lang, [data[0].call_en, data[0].call_ru, data[0].call_hy])}</a>
                     <p>{handleGetData(lang, [data[0].date1_en, data[0].date1_ru, data[0].date1_hy])}</p>
                     <p>{handleGetData(lang, [data[0].date2_en, data[0].date2_ru, data[0].date2_hy])}</p>
                     <a href={`mailto:${data[0].email}`} style={{ textDecoration: 'none', color: '#DF3030' }}>✉️ {data[0].email}</a>
@@ -87,17 +87,7 @@ const Footer = () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link to='/pages/compare' className='link'>
-                                    {handleGetData(lang, ['Compare', 'Сравнивать', 'Համեմատեք'])}
-                                </Link>
-                            </li>
-                            <li>
                                 <Link to='/pages/faq' className='link'>FAQ</Link>
-                            </li>
-                            <li>
-                                <Link to='/pages/wishlist' className='link'>
-                                    {handleGetData(lang, ['Wishlist', 'Пожелания', 'Ցանկություններ'])}
-                                </Link>
                             </li>
                         </ul>
                     </div>

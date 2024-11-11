@@ -11,6 +11,9 @@ const Cart = ({ show }) => {
     const [error, setError] = useState(null);
     const [totalPrice, setTotalPrice] = useState(0);
     const [callRemove, setCallRemove] = useState(false);
+    const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+    const [selectedItems, setSelectedItems] = useState([]);
+    const [formData, setFormData] = useState({ name: '', surname: '', phone: '' });
     const [lang] = useState(localStorage.getItem('lang') || 'hy');
     const navigate = useNavigate();
 
@@ -18,10 +21,10 @@ const Cart = ({ show }) => {
 
     useEffect(() => {
         AOS.init({
-            duration: 700,
+            duration: 300,
             once: true,
         });
-
+        document.body.style.overflow = isOrderModalOpen ? 'hidden' : 'auto';
         document.body.style.overflow = 'hidden';
 
         return () => {
@@ -145,10 +148,18 @@ const Cart = ({ show }) => {
         }
     };
 
-    const updateCartQuantity = async (productId, newQuantity) => {
+    const updateCartQuantity = async (id, productId, newQuantity) => {
+        const productData = data.find(product => product.id === id);
+
+        if (!productData) return;
+
+        const maxQuantity = productData.count;
+        if (newQuantity > maxQuantity) {
+            newQuantity = maxQuantity;
+            alert(`Only ${maxQuantity} units of ${productData.name} are available.`);
+        }
+
         try {
-            console.log('Updating quantity for product:', productId);
-    
             const response = await fetch(`https://shinflex.am/SFApi/cart-items/${productId}/`, {
                 method: 'PUT',
                 headers: {
@@ -157,31 +168,35 @@ const Cart = ({ show }) => {
                 },
                 body: JSON.stringify({ quantity: newQuantity }),
             });
-            
-    
+
             if (!response.ok) {
                 throw new Error('Failed to update cart quantity');
             }
-    
+
             setCartItems(prevItems =>
                 prevItems.map(item =>
                     item.product === productId ? { ...item, quantity: newQuantity } : item
                 )
             );
-            
+
+            setCallRemove((prev) => !prev);
             window.dispatchEvent(new Event('cartUpdated'));
         } catch (error) {
             console.error('Error updating cart quantity:', error);
         }
     };
-    
-    const handleIncreaseQuantity = (productId, currentQuantity) => {
-        updateCartQuantity(productId, currentQuantity + 1);
+
+    const handleIncreaseQuantity = (productId) => {
+        const itemsToUpdate = cartItems.filter(item => item.product === productId);
+        updateCartQuantity(productId, itemsToUpdate[0].id, itemsToUpdate[0].quantity + 1);
     };
-    
-    const handleDecreaseQuantity = (productId, currentQuantity) => {
-        if (currentQuantity > 1) {
-            updateCartQuantity(productId, currentQuantity - 1);
+
+    const handleDecreaseQuantity = (productId) => {
+        const itemsToUpdate = cartItems.filter(item => item.product === productId);
+        if (itemsToUpdate[0].quantity > 1) {
+            updateCartQuantity(productId, itemsToUpdate[0].id, itemsToUpdate[0].quantity - 1);
+        } else {
+            handleRemoveItem(productId)
         }
     };
 
@@ -195,6 +210,69 @@ const Cart = ({ show }) => {
     const handleProductClick = (product) => {
         show(false);
         navigate('/product-details', { state: product });
+    };
+
+    const handleCheckboxChange = (productId) => {
+        setSelectedItems(prevSelected => {
+            const newSelectedItems = prevSelected.includes(productId)
+                ? prevSelected.filter(id => id !== productId)
+                : [...prevSelected, productId];
+            return newSelectedItems;
+        });
+    };
+
+    const handleOrderSubmit = async () => {
+        if (!formData.name || !formData.surname || !formData.phone) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        if (selectedItems.length === 0) {
+            alert("Please select at least one item.");
+            return;
+        }
+
+        const orderItems = cartItems
+            .filter(item => selectedItems.includes(item.product))
+            .map(item => {
+                const productData = data.find(product => product.id === item.product);
+                return {
+                    name: productData.name,
+                    quantity: item.quantity,
+                    price: productData.sale
+                        ? (parseFloat(productData.price) * (100 - productData.discount_procent) / 100).toFixed(2)
+                        : parseFloat(productData.price).toFixed(2),
+                };
+            });
+
+        const orderData = {
+            name: formData.name,
+            surname: formData.surname,
+            phone: formData.phone,
+            products: orderItems
+        };
+
+        try {
+            const response = await fetch('https://shinflex.am/SFApi/order/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(orderData)
+            });
+
+            if (!response.ok) throw new Error('Failed to place order');
+            alert('Order placed successfully!');
+            setIsOrderModalOpen(false);
+        } catch (error) {
+            console.error('Order error:', error);
+        }
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevData => ({ ...prevData, [name]: value }));
     };
 
     return (
@@ -232,14 +310,14 @@ const Cart = ({ show }) => {
                                                     ? (parseFloat(productData.price) * ((100 - productData.discount_procent) / 100)).toFixed(2)
                                                     : parseFloat(productData.price).toFixed(2)}դր․
                                             </p>
-                                            <button style={{color: 'red', backgroundColor: 'transparent', padding: '0 5px', border: 'none', fontSize: '20px'}} onClick={() => handleDecreaseQuantity(productData.id, item.id)}>-</button>
-                                            <button style={{color: '#000', backgroundColor: 'transparent', padding: '0 5px', border: 'none', fontSize: '20px'}} onClick={() => handleIncreaseQuantity(productData.id, item.id)}>+</button>
+                                            <button style={{ color: 'red', backgroundColor: 'transparent', padding: '0 5px', border: 'none', fontSize: '20px', cursor: 'pointer' }} onClick={() => handleDecreaseQuantity(productData.id)}>-</button>
+                                            <button style={{ color: '#000', backgroundColor: 'transparent', padding: '0 5px', border: 'none', fontSize: '20px', cursor: 'pointer' }} onClick={() => handleIncreaseQuantity(productData.id)}>+</button>
                                         </div>
                                         <button
                                             className="remove-btn"
                                             onClick={() => handleRemoveItem(productData.id)}
                                         >
-                                            <FaTrash color="red" />
+                                            <FaTrash color="#DF3030" />
                                         </button>
                                     </li>
                                 );
@@ -251,6 +329,93 @@ const Cart = ({ show }) => {
                 <div className="cart-summary">
                     <p>{handleGetData(lang, ['Total Price: ', 'Общая стоимость: ', 'Ընդհանուր գինը: ']) + totalPrice.toFixed(2)}դր․</p>
                 </div>
+
+                <button className="place-order-btn" onClick={() => setIsOrderModalOpen(true)} style={{
+                    width: 'calc(100% - 32px)',
+                    marginLeft: '16px',
+                    padding: '10px 0',
+                    backgroundColor: '#DF3030',
+                    color: '#fff',
+                    border: 'none',
+                    cursor: 'pointer',
+                    marginTop: '20px',
+                    borderRadius: '4px',
+                    fontSize: '16px',
+                    lineHeight: '1',
+                    fontWeight: '500'
+                }}>
+                    {handleGetData(lang, ['Place Order', 'Разместить заказ', 'Տեղադրեք պատվերը'])}
+                </button>
+
+                {isOrderModalOpen && (
+                    <div className="order-modal">
+                        <div className="order-form">
+                            <h2>{handleGetData(lang, ['Place Your Order', 'Оформите заказ', 'Տեղադրեք Ձեր պատվերը'])}</h2>
+                            <input
+                                type="text"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleInputChange}
+                                placeholder={handleGetData(lang, ['Name', 'Имя', 'Անուն'])}
+                                autoComplete='off'
+                                required
+                            />
+                            <input
+                                type="text"
+                                name="surname"
+                                value={formData.surname}
+                                onChange={handleInputChange}
+                                placeholder={handleGetData(lang, ['Surname', 'Фамилия', 'Ազգանուն'])}
+                                autoComplete='off'
+                                required
+                            />
+                            <input
+                                type="tel"
+                                name="phone"
+                                value={formData.phone}
+                                onChange={handleInputChange}
+                                placeholder={handleGetData(lang, ['Phone number', 'Номер телефона', 'Հեռախոսահամար'])}
+                                autoComplete='off'
+                                required
+                            />
+
+                            <h3 style={{ color: '#000' }}>{handleGetData(lang, ['Select Items', 'Выбрать продукты', 'Ընտրեք ապրանքներ'])}</h3>
+                            <ul>
+                                {Object.values(cartItems.reduce((acc, item) => {
+                                    const productId = item.product;
+                                    if (!acc[productId]) {
+                                        acc[productId] = { ...item, quantity: 0 };
+                                    }
+                                    acc[productId].quantity += item.quantity;
+                                    return acc;
+                                }, {})).map((item, id) => {
+                                    const productData = data.find(product => product.id === item.product);
+                                    if (productData) {
+                                        return (
+                                            <li key={id} style={{ color: '#000' }}>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={selectedItems.includes(item.product)}
+                                                    onChange={() => handleCheckboxChange(item.product)}
+                                                    id={`select${id}`}
+                                                    style={{ cursor: 'pointer', accentColor: '#DF3030' }}
+                                                />
+                                                <label htmlFor={`select${id}`} style={{ cursor: 'pointer' }}>{productData.name} ({item.quantity})</label>
+                                            </li>
+                                        );
+                                    }
+                                    return null;
+                                })}
+                            </ul>
+                            <button className="submit-order-btn" onClick={handleOrderSubmit}>
+                                {handleGetData(lang, ['Submit Order', 'Отправить заказ', 'Հաստատել պատվերը'])}
+                            </button>
+                            <button className="close-modal-btn" onClick={() => setIsOrderModalOpen(false)}>
+                                ✕
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

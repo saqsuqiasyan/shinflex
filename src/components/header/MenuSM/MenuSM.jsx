@@ -11,7 +11,7 @@ const MenuSM = ({ sm }) => {
 
     useEffect(() => {
         AOS.init({
-            duration: 500,
+            duration: 300,
             once: true,
         });
 
