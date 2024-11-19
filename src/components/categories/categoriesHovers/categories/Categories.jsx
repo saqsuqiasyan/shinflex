@@ -75,7 +75,7 @@ const Categories = () => {
     };
 
     const handleProductClick = (product) => {
-        navigate('/product-details', { state: product });
+        navigate(`/product-details/${product.id}`);
         setHideTools(true)
     };
 
@@ -91,7 +91,7 @@ const Categories = () => {
             </div>
 
             <div className="right_hand">
-                <p className="best_selling">Best Selling</p>
+                <p className="best_selling">{handleGetData(lang, ['Best Selling', 'Самый продаваемый', 'Լավագույն վաճառք'])}</p>
 
                 <div className="items">
                     {products.map((item, id) => (
@@ -103,12 +103,6 @@ const Categories = () => {
                                 <p className="name" onClick={() => setHideTools(true)}>
                                     {handleGetData(lang, [item.name_en, item.name_ru, item.name_hy])}
                                 </p>
-                                <div className="rating">
-                                    {new Array(5).fill(null).map((_, index) =>
-                                        <IoStar key={index} className='rating_icon' style={{ marginRight: '3px', cursor: 'pointer' }} />)
-                                    }
-                                    <span className='rating_number'>(0)</span>
-                                </div>
                                 <p className="price">{parseInt(item.price)}դր․</p>
                             </div>
                         </div>

@@ -62,7 +62,6 @@ const Slide = () => {
                                     <p className='hot-price-suggestion'>{handleGetData(lang, [data[0].slayder_name_en, data[0].slayder_name_ru, data[0].slayder_name_hy])}</p>
                                     <p className='hot-price-text'>{handleGetData(lang, ['Starting at', 'Горячая цена', 'Թեժ գին'])}</p>
                                     <p className='hot-price'>{data[0].slayder_price}դր․</p>
-                                    <button>{handleGetData(lang, [data[0].button_name_en, data[0].button_name_ru, data[0].button_name_hy])}</button>
                                 </div>
                             </div>
                         </div>
@@ -76,12 +75,9 @@ const Slide = () => {
                                     <p className='hot-price-text'>{handleGetData(lang, ['Starting at', 'Горячая цена', 'Թեժ գին'])}</p>
 
                                     <p className='hot-price'>{data[1].product_price1}դր․</p>
-                                    <button>{handleGetData(lang, [data[0].button_name_en, data[0].button_name_ru, data[0].button_name_hy])}</button>
                                 </div>
                             </div>
                         </div>
-
-
                         <div className="carousel-slide">
                             <img src={data[1].product_img2} alt="Slide 1" />
                             <div className="carousel-text">
@@ -93,8 +89,6 @@ const Slide = () => {
                                     <p className='hot-price-text'>{handleGetData(lang, ['Starting at', 'Горячая цена', 'Թեժ գին'])}</p>
 
                                     <p className='hot-price'>{data[1].product_price2}դր․</p>
-
-                                    <button>{handleGetData(lang, [data[0].button_name_en, data[0].button_name_ru, data[0].button_name_hy])}</button>
                                 </div>
                             </div>
                         </div>

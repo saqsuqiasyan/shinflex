@@ -52,6 +52,13 @@ const HeaderTop = () => {
     return lang === 'en' ? en : lang === 'ru' ? ru : hy
   }
 
+  const scrollToMap = () => {
+    const mapElement = document.getElementById('location-map');
+    if (mapElement) {
+      mapElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className='redContainer'>
       <ul className='topLeftHand'>
@@ -66,13 +73,13 @@ const HeaderTop = () => {
           </Link>
         </li>
         <li>
-          <Link to='/pages/contact' style={{ color: 'inherit', textDecoration: 'none' }}>
+          <p onClick={scrollToMap} style={{ color: 'inherit', textDecoration: 'none' }}>
             {handleGetData(lang, ['Contact', 'Контакт', 'Կապ'])}
-          </Link>
+          </p>
         </li>
         <li>
           <Link to='/pages/faq' style={{ color: 'inherit', textDecoration: 'none' }}>
-            FAQ
+            {handleGetData(lang, ['FAQ', 'Часто задаваемые вопросы', 'ՀՏՀ'])}
           </Link>
         </li>
       </ul>

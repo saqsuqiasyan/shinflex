@@ -78,7 +78,11 @@ const HeaderMain = () => {
     const syncLocalStorage = (event) => {
       if (event.key === 'cartCount' || event.key === 'totalPrice') {
         setCartCount(parseInt(localStorage.getItem('cartCount') || '0'));
-        setTotalPrice(parseFloat(localStorage.getItem('totalPrice') || '0'));
+        const delayUpdate = setTimeout(() => {
+          setTotalPrice(parseFloat(localStorage.getItem('totalPrice') || '0'));
+        }, 1000);
+  
+        return () => clearTimeout(delayUpdate);
       }
     };
 
@@ -122,7 +126,7 @@ const HeaderMain = () => {
   const handleProductClick = (product) => {
     setProducts([]);
     setSearch('')
-    navigate('/product-details', { state: product });
+    navigate(`/product-details/${product}`);
   };
 
   return (
@@ -158,7 +162,7 @@ const HeaderMain = () => {
           overflowY: 'auto'
         }}>
           {products.map((product, id) => (
-            <div className='searchResult' key={id} onClick={() => handleProductClick(product)} style={{
+            <div className='searchResult' key={id} onClick={() => handleProductClick(product.id)} style={{
               cursor: 'pointer',
               padding: '10px 0',
               borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
@@ -181,7 +185,7 @@ const HeaderMain = () => {
             <FiPhoneCall className='statsIcon' />
             <div>
               <p>{handleGetData(lang, [data[0].call_text_en, data[0].call_text_ru, data[0].call_text_hy])}</p>
-              <span><a style={{ color: 'inherit', textDecoration: 'none' }} href={`tel:${handleGetData(lang, [data[0].call_number_en, data[0].call_number_ru, data[0].call_number_hy])}`}>{handleGetData(lang, [data[0].call_number_en, data[0].call_number_ru, data[0].call_number_hy])}</a></span>
+              <span><a style={{ color: 'inherit', textDecoration: 'none' }} href={`tel:${data[0].call_number}`}>{data[0].call_number}</a></span>
             </div>
           </div>
         </li>
@@ -196,7 +200,7 @@ const HeaderMain = () => {
             </Link>}
             <div className='remo'>
               <p>{handleGetData(lang, [data[0].login_en, data[0].login_ru, data[0].login_hy])}</p>
-              <span>{name ? name : <Link to="/account/login" style={{ color: 'inherit', textDecoration: 'none' }}>Log in</Link>}</span>
+              <span>{name ? name : <Link to="/account/login" style={{ color: 'inherit', textDecoration: 'none' }}>{handleGetData(lang, ['Log in', 'Авторизоваться', 'Մուտք'])}</Link>}</span>
             </div>
           </div>
         </li>

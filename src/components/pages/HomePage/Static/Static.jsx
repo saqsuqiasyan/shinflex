@@ -28,7 +28,7 @@ const Static = () => {
     };
 
     const handleProductClick = (product) => {
-        navigate('/product-details', { state: product });
+        navigate(`/product-details/${product.id}`);
     };
 
     if (loading) return <Loading />;
@@ -86,7 +86,7 @@ const Static = () => {
                         <p>{item.price}</p>
                     </div>
                     <div className="right_hand">
-                        <img src={item.src} alt={item.alt} style={{ mixBlendMode: 'multiply' }} />
+                        <img src={item.src} alt={item.alt} />
                     </div>
                 </div>
             ))}

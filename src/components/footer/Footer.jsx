@@ -4,7 +4,6 @@ import './Footer.css';
 
 const Footer = () => {
     const [data, setData] = useState([]);
-    const [categories, setCategories] = useState([])
     const [loading, setLoading] = useState(true);
     const [lang] = useState(localStorage.getItem('lang') || 'hy');
 
@@ -14,23 +13,6 @@ const Footer = () => {
                 const response = await fetch('https://shinflex.am/SFApi/Footer/');
                 const result = await response.json();
                 setData(result);
-                setLoading(false);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, []);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setLoading(true)
-                const response = await fetch('https://shinflex.am/SFApi/Category/');
-                const result = await response.json();
-                setCategories(result.slice(0, 5));
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -53,7 +35,7 @@ const Footer = () => {
                 <div className="footer-left">
                     <img src={data[0].logo} alt="ShinFlex" />
                     <p>
-                        {handleGetData(lang, ['Here you can find all kinds of products necessary for home and construction.', 'Здесь вы можете найти все виды товаров, необходимых для дома и строительства.', 'Այստեղ կարող եք գտնել տան եւ շինարարության համար անհրաժեշտ բոլոր տեսակի ապրանքները:'])}
+                        {handleGetData(lang, ['Here you can find all kinds of products necessary for home and construction.', 'Здесь вы можете найти все виды товаров, необходимых для дома и строительства.', 'Այստեղ կարող եք գտնել տան և շինարարության համար անհրաժեշտ բոլոր տեսակի ապրանքները:'])}
                     </p>
                     <p>Shop On Map</p>
                     <div className="social-icons">
@@ -66,39 +48,18 @@ const Footer = () => {
 
                 <div className="footer-help">
                     <h3>{handleGetData(lang, [data[0].need_en, data[0].need_ru, data[0].need_hy])}</h3>
-                    <a href={`tel:${handleGetData(lang, [data[0].call_en, data[0].call_ru, data[0].call_hy])}`} style={{color:'#DF3030', textDecoration: 'none'}}>📞 {handleGetData(lang, [data[0].call_en, data[0].call_ru, data[0].call_hy])}</a>
+                    <a href={`tel:${data[0].call}`} style={{ color: '#DF3030', textDecoration: 'none', margin: '8px 0' }}>📞 {data[0].call}</a> <p></p>
+                    <a href={`tel:${data[0].call2}`} style={{ color: '#DF3030', textDecoration: 'none', margin: '8px 0' }}>📞 {data[0].call2}</a>
                     <p>{handleGetData(lang, [data[0].date1_en, data[0].date1_ru, data[0].date1_hy])}</p>
                     <p>{handleGetData(lang, [data[0].date2_en, data[0].date2_ru, data[0].date2_hy])}</p>
+                    <p>{data[0].addres}</p>
                     <a href={`mailto:${data[0].email}`} style={{ textDecoration: 'none', color: '#DF3030' }}>✉️ {data[0].email}</a>
                 </div>
 
                 <div className="footer-links">
                     <div>
-                        <h3>{handleGetData(lang, [data[0].inf_en, data[0].inf_ru, data[0].inf_hy])}</h3>
-                        <ul>
-                            <li>
-                                <Link to='/pages/about-us' style={{ color: 'inherit', textDecoration: 'none' }}>
-                                    {handleGetData(lang, ['About us', 'О нас', 'Մեր մասին'])}
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to='/pages/contact' style={{ color: 'inherit', textDecoration: 'none' }}>
-                                    {handleGetData(lang, ['Contact', 'Контакт', 'Կապ'])}
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to='/pages/faq' className='link'>FAQ</Link>
-                            </li>
-                        </ul>
-                    </div>
-                    <div>
                         <h3>{handleGetData(lang, [data[0].qulink_en, data[0].qulink_ru, data[0].qulink_hy])}</h3>
                         <ul>
-                            <li>
-                                <Link to='/policies/contact-information' className='link'>
-                                    {handleGetData(lang, ['Contact Information', 'Контактная информация', 'Կոնտակտային տվյալներ'])}
-                                </Link>
-                            </li>
                             <li>
                                 <Link to='/policies/privacy-policy' className='link'>
                                     {handleGetData(lang, ['Privacy Policy', 'Kонфиденциальность', 'Գաղտնիություն'])}
@@ -121,18 +82,6 @@ const Footer = () => {
                             </li>
                         </ul>
                     </div>
-                    <div>
-                        <h3>{handleGetData(lang, [data[0].exlink_en, data[0].exlink_ru, data[0].exlink_hy])}</h3>
-                        <ul>
-                            {categories.map((item, id) => (
-                                <li key={id}>
-                                    <Link to={`/collections/${item.category_name_en.toLowerCase().replaceAll(' ', '-')}/${item.id}`} className='link'>
-                                        {handleGetData(lang, [item.category_name_en, item.category_name_ru, item.category_name_hy])}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
                 </div>
             </div>
 
@@ -141,7 +90,6 @@ const Footer = () => {
                 <div className="payment-icons">
                     <i className="fab fa-cc-visa"></i>
                     <i className="fab fa-cc-mastercard"></i>
-                    <i className="fab fa-cc-amex"></i>
                     <i className="fab fa-cc-paypal"></i>
                     <i className="fab fa-cc-discover"></i>
                 </div>

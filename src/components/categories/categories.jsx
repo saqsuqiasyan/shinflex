@@ -87,7 +87,7 @@ const Categories = () => {
   const handleProductClick = (product) => {
     setProducts([]);
     setSearch('')
-    navigate('/product-details', { state: product });
+    navigate(`/product-details/${product}`);
   };
 
   return (
@@ -100,7 +100,6 @@ const Categories = () => {
           <OurStoreX />
           <SpecialX label={handleGetData(lang, [data[0].special_name_en, data[0].special_name_ru, data[0].special_name_hy])} />
           <CategoriesX />
-          {/* <TopDealsX /> */}
           <ElementsX />
         </div>
       </div>
@@ -124,7 +123,7 @@ const Categories = () => {
           overflowY: 'auto'
         }}>
           {products.map((product, id) => (
-            <div className='searchResult' key={id} onClick={() => handleProductClick(product)} style={{
+            <div className='searchResult' key={id} onClick={() => handleProductClick(product.id)} style={{
               cursor: 'pointer',
               padding: '10px',
               borderBottom: '1px solid rgba(0, 0, 0, 0.1)'

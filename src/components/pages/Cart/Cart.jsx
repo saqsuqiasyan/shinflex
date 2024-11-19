@@ -3,9 +3,11 @@ import './Cart.css';
 import { useNavigate } from 'react-router-dom';
 import { FaTrash } from 'react-icons/fa';
 import AOS from 'aos';
+import Message from '../../Message/Message';
 
 const Cart = ({ show }) => {
     const [data, setData] = useState([]);
+    const [isClickable, setIsClickable] = useState(false);
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -15,6 +17,8 @@ const Cart = ({ show }) => {
     const [selectedItems, setSelectedItems] = useState([]);
     const [formData, setFormData] = useState({ name: '', surname: '', phone: '' });
     const [lang] = useState(localStorage.getItem('lang') || 'hy');
+    const [alertMessage, setAlertMessage] = useState('');
+    const [isAlertVisible, setIsAlertVisible] = useState(false);
     const navigate = useNavigate();
 
     const token = localStorage.getItem('token');
@@ -89,18 +93,20 @@ const Cart = ({ show }) => {
     }, [token, callRemove]);
 
     useEffect(() => {
-        const total = cartItems.reduce((total, item) => {
-            const productData = data.find(el => el.id === item.product);
-            if (!productData) return total;
+        if (data.length && cartItems.length) {
+            const total = cartItems.reduce((total, item) => {
+                const productData = data.find(el => el.id === item.product);
+                if (!productData) return total;
 
-            return total + (productData.sale
-                ? item.quantity * (parseFloat(productData.price) * (100 - productData.discount_procent) / 100)
-                : item.quantity * parseFloat(productData.price));
-        }, 0);
+                return total + (productData.sale
+                    ? item.quantity * (parseFloat(productData.price) * (100 - productData.discount_procent) / 100)
+                    : item.quantity * parseFloat(productData.price));
+            }, 0);
 
-        setTotalPrice(total);
-        localStorage.setItem('totalPrice', total.toFixed(2));
-        window.dispatchEvent(new Event('cartUpdated'));
+            setTotalPrice(total);
+            localStorage.setItem('totalPrice', total.toFixed(2));
+            window.dispatchEvent(new Event('cartUpdated'));
+        }
     }, [cartItems, data]);
 
     const deleteItemFromCart = async (productId) => {
@@ -156,7 +162,9 @@ const Cart = ({ show }) => {
         const maxQuantity = productData.count;
         if (newQuantity > maxQuantity) {
             newQuantity = maxQuantity;
-            alert(`Only ${maxQuantity} units of ${productData.name} are available.`);
+            setAlertMessage(false)
+            setAlertMessage(handleGetData(lang, [`Only ${maxQuantity} units of ${handleGetData(lang, [productData.name_en, productData.name_ru, productData.name_hy])} are available.`, `Доступно только ${maxQuantity} единиц ${handleGetData(lang, [productData.name_en, productData.name_ru, productData.name_hy])}.`, `Հասանելի են միայն ${maxQuantity} միավոր ${handleGetData (lang, [productData.name_en, productData.name_ru, productData.name_hy])}:`]));
+            setIsAlertVisible(true);
         }
 
         try {
@@ -209,7 +217,7 @@ const Cart = ({ show }) => {
 
     const handleProductClick = (product) => {
         show(false);
-        navigate('/product-details', { state: product });
+        navigate(`/product-details/${product.id}`);
     };
 
     const handleCheckboxChange = (productId) => {
@@ -222,13 +230,21 @@ const Cart = ({ show }) => {
     };
 
     const handleOrderSubmit = async () => {
+        setIsClickable(true);
+
         if (!formData.name || !formData.surname || !formData.phone) {
-            alert("Please fill in all fields.");
+            setAlertMessage(false)
+            setAlertMessage(handleGetData(lang, ["Please fill in all fields.", "Пожалуйста, заполните все поля.", "Խնդրում ենք լրացնել բոլոր դաշտերը։"]));
+            setIsAlertVisible(true);
+            setIsClickable(false);
             return;
         }
 
         if (selectedItems.length === 0) {
-            alert("Please select at least one item.");
+            setAlertMessage(false)
+            setAlertMessage(handleGetData(lang, ['Please select at least one item.', 'Пожалуйста, выберите хотя бы один пункт.', 'Խնդրում ենք ընտրել առնվազն մեկ տարր:']));
+            setIsAlertVisible(true);
+            setIsClickable(false);
             return;
         }
 
@@ -263,7 +279,9 @@ const Cart = ({ show }) => {
             });
 
             if (!response.ok) throw new Error('Failed to place order');
-            alert('Order placed successfully!');
+            setAlertMessage(false)
+            setAlertMessage(handleGetData(lang, ['Order placed successfully!', 'Заказ успешно оформлен!', 'Պատվերը հաջողությամբ կատարվեց:']));
+            setIsAlertVisible(true);
             setIsOrderModalOpen(false);
         } catch (error) {
             console.error('Order error:', error);
@@ -278,6 +296,7 @@ const Cart = ({ show }) => {
     return (
         <div className='cart-container'>
             <div className="close" onClick={() => show(false)}></div>
+            {isAlertVisible && <Message message={alertMessage} onClose={() => setIsAlertVisible(false)} />}
 
             <div className="cart-drawer" data-aos='fade-left'>
                 <div id='cart-top'>
@@ -304,14 +323,15 @@ const Cart = ({ show }) => {
                                     <li key={idx} className="cart-item">
                                         <img src={productData.img1} alt={productData.name} onClick={() => handleProductClick(data[productData.id - 1])} />
                                         <div>
-                                            <h3 style={{ color: '#000' }}>{productData.name}</h3>
-                                            <p style={{ color: '#000' }}>
+                                            <h3 style={{ color: '#000' }}>{handleGetData(lang, [productData.name_en, productData.name_ru, productData.name_hy])}</h3>
+                                            <p style={{ color: '#000', margin: '7px 0' }}>
                                                 {item.quantity} x {productData.sale
                                                     ? (parseFloat(productData.price) * ((100 - productData.discount_procent) / 100)).toFixed(2)
                                                     : parseFloat(productData.price).toFixed(2)}դր․
                                             </p>
-                                            <button style={{ color: 'red', backgroundColor: 'transparent', padding: '0 5px', border: 'none', fontSize: '20px', cursor: 'pointer' }} onClick={() => handleDecreaseQuantity(productData.id)}>-</button>
-                                            <button style={{ color: '#000', backgroundColor: 'transparent', padding: '0 5px', border: 'none', fontSize: '20px', cursor: 'pointer' }} onClick={() => handleIncreaseQuantity(productData.id)}>+</button>
+                                            <button style={{ color: '#000', backgroundColor: '#ddd', padding: '5px 15px', border: 'none', fontSize: '16px', cursor: 'pointer', borderRadius: '5px' }} onClick={() => handleDecreaseQuantity(productData.id)}>-</button>
+                                            <span style={{ color: '#000', margin: '0 5px' }}>{item.quantity}</span>
+                                            <button style={{ color: '#000', backgroundColor: '#ddd', padding: '5px 15px', border: 'none', fontSize: '16px', cursor: 'pointer', borderRadius: '5px' }} onClick={() => handleIncreaseQuantity(productData.id)}>+</button>
                                         </div>
                                         <button
                                             className="remove-btn"
@@ -333,6 +353,7 @@ const Cart = ({ show }) => {
                 <button className="place-order-btn" onClick={() => setIsOrderModalOpen(true)} style={{
                     width: 'calc(100% - 32px)',
                     marginLeft: '16px',
+                    marginBottom: '50px',
                     padding: '10px 0',
                     backgroundColor: '#DF3030',
                     color: '#fff',
@@ -344,7 +365,7 @@ const Cart = ({ show }) => {
                     lineHeight: '1',
                     fontWeight: '500'
                 }}>
-                    {handleGetData(lang, ['Place Order', 'Разместить заказ', 'Տեղադրեք պատվերը'])}
+                    {handleGetData(lang, ['Order', 'Заказать', 'Պատվիրել'])}
                 </button>
 
                 {isOrderModalOpen && (
@@ -400,15 +421,15 @@ const Cart = ({ show }) => {
                                                     id={`select${id}`}
                                                     style={{ cursor: 'pointer', accentColor: '#DF3030' }}
                                                 />
-                                                <label htmlFor={`select${id}`} style={{ cursor: 'pointer' }}>{productData.name} ({item.quantity})</label>
+                                                <label htmlFor={`select${id}`} style={{ cursor: 'pointer' }}>{handleGetData(lang, [productData.name_en, productData.name_ru, productData.name_hy])} ({item.quantity})</label>
                                             </li>
                                         );
                                     }
                                     return null;
                                 })}
                             </ul>
-                            <button className="submit-order-btn" onClick={handleOrderSubmit}>
-                                {handleGetData(lang, ['Submit Order', 'Отправить заказ', 'Հաստատել պատվերը'])}
+                            <button className="submit-order-btn" onClick={handleOrderSubmit} disabled={isClickable}>
+                                {handleGetData(lang, ['Order', 'Заказать', 'Պատվիրել'])}
                             </button>
                             <button className="close-modal-btn" onClick={() => setIsOrderModalOpen(false)}>
                                 ✕

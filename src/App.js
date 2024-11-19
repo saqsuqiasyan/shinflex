@@ -21,20 +21,29 @@ const App = () => {
     const handleKeyDown = (event) => {
       if (event.key === "F12" || event.keyCode === 123) {
         event.preventDefault();
-        console.log("F12 is disabled");
+      }
+
+      if (
+        (event.ctrlKey || event.metaKey) &&
+        event.shiftKey &&
+        event.key.toLowerCase() === "c"
+      ) {
+        event.preventDefault();
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
 
+    const handleContextMenu = (event) => {
+      event.preventDefault();
+    };
+    document.addEventListener("contextmenu", handleContextMenu);
+
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("contextmenu", handleContextMenu);
     };
   }, []);
-
-  document.addEventListener('contextmenu', (e) => {
-    e.preventDefault();
-  });
 
   return (
     <Router>
@@ -45,13 +54,12 @@ const App = () => {
           <Route path="*" element={<Err404 />} />
           <Route path="/" element={<Home />} />
           <Route path="/account/login" element={<Login />} />
-          <Route path="/product-details" element={<ProductDetails />} />
+          <Route path="/product-details/:id" element={<ProductDetails />} />
           <Route path="/collections/:category/:categoryID" element={<AbrasivesPage />} />
           <Route path="/cutter-tools" element={<CutterToolsPage />} />
           <Route path='/pages/faq' element={<FAQ />} />
           <Route path='/pages/about-us' element={<AboutUs />} />
           <Route path='/policies/:policy' element={<Policy />} />
-          <Route path='/pages/contact' element={<Map />} />
           <Route path='/blogs/news' element={<Blogs />} />
           <Route path="/news/post/:id" element={<BlogItem />} />
         </Routes>

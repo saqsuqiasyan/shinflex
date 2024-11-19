@@ -35,7 +35,7 @@ const TopSuggestions = () => {
     };
 
     const handleProductClick = (product) => {
-        navigate('/product-details', { state: product });
+        navigate(`/product-details/${product.id}`);
     };
 
     return (

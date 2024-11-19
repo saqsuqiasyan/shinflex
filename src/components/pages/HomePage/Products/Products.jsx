@@ -69,7 +69,7 @@ const Products = ({ mix = { availability: {}, brand: {}, category: {} }, categor
     };
 
     const handleProductClick = (product) => {
-        navigate('/product-details', { state: product });
+        navigate(`/product-details/${product.id}`);
     };
 
     if (loading) return;

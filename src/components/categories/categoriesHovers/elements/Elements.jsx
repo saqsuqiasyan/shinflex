@@ -41,10 +41,6 @@ const Element = () => {
       url: '/blogs/news'
     },
     {
-      title: handleGetData(lang, [data[0].page_name3_en, data[0].page_name3_ru, data[0].page_name3_hy]),
-      url: '/pages/contact'
-    },
-    {
       title: handleGetData(lang, [data[0].page_name4_en, data[0].page_name4_ru, data[0].page_name4_hy]),
       url: '/pages/faq'
     }

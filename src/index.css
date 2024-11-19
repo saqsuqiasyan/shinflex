@@ -1,18 +1,1 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  user-select: none;
-  -webkit-user-drag: none;
-}
-
-body,
-html {
-  margin: 0 auto;
-}
-
-@media (min-width: 1920px) {
-  body {
-    max-width: 1800px;
-  }
-}
+*{margin:0;padding:0;box-sizing:border-box;user-select:none;-webkit-user-drag:none}body,html{margin:0 auto;overflow-x:hidden}@media (min-width:1920px){body{max-width:1800px}}
