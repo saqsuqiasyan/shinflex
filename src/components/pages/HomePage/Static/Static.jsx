@@ -32,7 +32,6 @@ const Static = () => {
     };
 
     if (loading) return <Loading />;
-    console.log(data.length)
     const setup = data.length > 2 
         ? data.slice(data.length - 3).map((item,index)=>{
             return {
@@ -108,9 +107,7 @@ const Static = () => {
 
     return (
         <div className='HomePage_static__main'>
-            {console.log(setup)}
             {setup.map((item, index) => {
-                console.log(item)
                 return (
                     <div className='item' key={index} style={{ backgroundColor: `${item.bgc}`, color: `${item.color}` }} onClick={() => handleProductClick(item.product)}>
                         <div className="left_hand">
