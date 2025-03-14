@@ -19,9 +19,9 @@ import Policy from './components/pages/Policies/Policy.jsx';
 const App = () => {
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (event.key === "F12" || event.keyCode === 123) {
-        event.preventDefault();
-      }
+      // if (event.key === "F12" || event.keyCode === 123) {
+      //   event.preventDefault();
+      // }
 
       if (
         (event.ctrlKey || event.metaKey) &&

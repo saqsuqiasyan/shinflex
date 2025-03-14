@@ -57,7 +57,7 @@ const CategoriesX = () => {
                 style={{ height: '100%', lineHeight: '60px' }}
             >
                 <Link to='/collections/sale-collection/_' style={{ color: '#000', textDecoration: 'none' }} onClick={() => setHover(false)}>
-                    {handleGetData(lang, [data.name_en, data.name_ru, data.name_hy])}
+                    {handleGetData(lang, [data?.name_en, data?.name_ru, data?.name_hy])}
                 </Link>
                 <span className='sale' id='hot'>hot</span> <IoIosArrowDown className='arrow' style={{ marginTop: '20px' }} />
                 {hover && (
