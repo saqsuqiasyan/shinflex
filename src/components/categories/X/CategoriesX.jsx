@@ -15,7 +15,7 @@ const CategoriesX = () => {
             try {
                 const response = await fetch("https://shinflex.am/SFApi/Category/");
                 const result = await response.json();
-                setData(result[2]);
+                setData(result[0]);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -47,6 +47,8 @@ const CategoriesX = () => {
             once: true,
         });
     }, []);
+
+    console.log(data)
 
     return (
         <>
